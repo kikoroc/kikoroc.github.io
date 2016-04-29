@@ -1,0 +1,651 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="javascript,html5," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="差不多一个多月没写博客了，不过也没闲着，完成了 几件大事 ：结婚、户口、驾照、买车。感觉写代码更有劲了~哈哈…
+回到今天的主题，最近项目上有一个拍照的需求，对于客户端当然是个小问题，但是产品需要在网页版的页面上同样要实现跟客户端一样的体验！让用户可以在网页上拍照或者选取本地照片上传到服务器。
+看到这个需求有点蒙，首先还不确定网页如何调用系统相机，选本地照片的话弄个&amp;lt;input type=&amp;q">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用HTML5 File API和Canvas实现图片压缩、旋转、上传">
+<meta property="og:url" content="http://kikoroc.com/2014/11/10/使用HTML5 File API和Canvas实现图片压缩、旋转、上传/index.html">
+<meta property="og:site_name" content="kikoroc">
+<meta property="og:description" content="差不多一个多月没写博客了，不过也没闲着，完成了 几件大事 ：结婚、户口、驾照、买车。感觉写代码更有劲了~哈哈…
+回到今天的主题，最近项目上有一个拍照的需求，对于客户端当然是个小问题，但是产品需要在网页版的页面上同样要实现跟客户端一样的体验！让用户可以在网页上拍照或者选取本地照片上传到服务器。
+看到这个需求有点蒙，首先还不确定网页如何调用系统相机，选本地照片的话弄个&amp;lt;input type=&amp;q">
+<meta property="og:updated_time" content="2016-04-29T17:11:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用HTML5 File API和Canvas实现图片压缩、旋转、上传">
+<meta name="twitter:description" content="差不多一个多月没写博客了，不过也没闲着，完成了 几件大事 ：结婚、户口、驾照、买车。感觉写代码更有劲了~哈哈…
+回到今天的主题，最近项目上有一个拍照的需求，对于客户端当然是个小问题，但是产品需要在网页版的页面上同样要实现跟客户端一样的体验！让用户可以在网页上拍照或者选取本地照片上传到服务器。
+看到这个需求有点蒙，首先还不确定网页如何调用系统相机，选本地照片的话弄个&amp;lt;input type=&amp;q">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6224350115549677000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 使用HTML5 File API和Canvas实现图片压缩、旋转、上传 | kikoroc </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?0dc5cea21c95c5e7b651894720cf278c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">kikoroc</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                使用HTML5 File API和Canvas实现图片压缩、旋转、上传
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-11-10T19:23:32+08:00" content="2014-11-10">
+              2014-11-10
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/11/10/使用HTML5 File API和Canvas实现图片压缩、旋转、上传/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/11/10/使用HTML5 File API和Canvas实现图片压缩、旋转、上传/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>差不多一个多月没写博客了，不过也没闲着，完成了 <strong>几件大事</strong> ：结婚、户口、驾照、买车。感觉写代码更有劲了~哈哈…</p>
+<p>回到今天的主题，最近项目上有一个拍照的需求，对于客户端当然是个小问题，但是产品需要在网页版的页面上同样要实现跟客户端一样的体验！让用户可以在网页上拍照或者选取本地照片上传到服务器。</p>
+<p>看到这个需求有点蒙，首先还不确定网页如何调用系统相机，选本地照片的话弄个<code>&lt;input type=&quot;file&quot;&gt;</code>应该就ok，其次手机拍一张照片都是几兆几兆的，如果不压缩一下图片，在这蛋疼的网络环境下，基本是没办法传到服务器的，网页上的环境也就那样，怎么做图片压缩呢？</p>
+<h2 id="网页拍摄照片-amp-选取本地照片"><a href="#网页拍摄照片-amp-选取本地照片" class="headerlink" title="网页拍摄照片&amp;选取本地照片"></a>网页拍摄照片&amp;选取本地照片</h2><p>这个看起来很麻烦，其实很简单，网页上可以调用系统原生的照片拍摄和选取操作。直接上代码：</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="keyword">input</span> <span class="keyword">type</span>=<span class="string">"file"</span> id=<span class="string">"photo"</span> accept=<span class="string">"image/*"</span> <span class="keyword">capture</span>=<span class="string">"camera"</span>&gt;</span><br></pre></td></tr></table></figure>
+<p>其中，<code>accept</code>和<code>capture</code>是<a href="http://www.w3.org/TR/html-media-capture/" target="_blank" rel="external">HTML5的API</a>，这样在网页上点击这个<code>input</code>之后会弹出拍摄和选取本地照片的窗口，和native app一样。</p>
+<h2 id="照片读取、压缩"><a href="#照片读取、压缩" class="headerlink" title="照片读取、压缩"></a>照片读取、压缩</h2><p>上面说到，如果不对照片进行处理的话，一张照片就是好几兆，在2g网络下基本不可能成功上传到服务器，所以肯定需要对照片进行压缩了。我们可以使用HTML5的File API配合Canvas绘图实现照片的压缩，代码：</p>
+<a id="more"></a>
+<h4 id="1-读取照片"><a href="#1-读取照片" class="headerlink" title="1.读取照片"></a>1.读取照片</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//绑定input change事件</span></span><br><span class="line">$(<span class="string">"#photo"</span>).unbind(<span class="string">"change"</span>).on(<span class="string">"change"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> file = <span class="keyword">this</span>.files[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">if</span>(file)&#123;</span><br><span class="line">        <span class="comment">//验证图片文件类型</span></span><br><span class="line">        <span class="keyword">if</span>(file.type &amp;&amp; !<span class="regexp">/image/i</span>.test(file.type))&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">var</span> reader = <span class="keyword">new</span> FileReader();</span><br><span class="line">        reader.onload = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">            <span class="comment">//readAsDataURL后执行onload，进入图片压缩逻辑</span></span><br><span class="line">            <span class="comment">//e.target.result得到的就是图片文件的base64 string</span></span><br><span class="line">            render(e.target.result);  </span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="comment">//以dataurl的形式读取图片文件</span></span><br><span class="line">        reader.readAsDataURL(file);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="2-压缩照片"><a href="#2-压缩照片" class="headerlink" title="2.压缩照片"></a>2.压缩照片</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义照片的最大高度</span></span><br><span class="line"><span class="keyword">var</span> MAX_HEIGHT = <span class="number">480</span>;</span><br><span class="line"><span class="keyword">var</span> render = <span class="function"><span class="keyword">function</span>(<span class="params">src</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> image = <span class="keyword">new</span> Image();</span><br><span class="line">	image.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="keyword">var</span> cvs = <span class="built_in">document</span>.getElementById(<span class="string">"cvs"</span>);</span><br><span class="line">		<span class="keyword">var</span> w = image.width;</span><br><span class="line">		<span class="keyword">var</span> h = image.height;</span><br><span class="line">		<span class="comment">//计算压缩后的图片长和宽</span></span><br><span class="line">		<span class="keyword">if</span>(h&gt;MAX_HEIGHT)&#123;</span><br><span class="line">			w *= MAX_HEIGHT/h;</span><br><span class="line">			h = MAX_HEIGHT;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">var</span> ctx = cvs.getContext(<span class="string">"2d"</span>);</span><br><span class="line">		cvs.width = w;</span><br><span class="line">		cvs.height = h;</span><br><span class="line">		<span class="comment">//将图片绘制到Canvas上，从原点0,0绘制到w,h</span></span><br><span class="line">		ctx.drawImage(image,<span class="number">0</span>,<span class="number">0</span>,w,h);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//进入图片上传逻辑</span></span><br><span class="line">		sendImg();</span><br><span class="line">	&#125;;</span><br><span class="line">	image.src = src;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="3-上传照片"><a href="#3-上传照片" class="headerlink" title="3.上传照片"></a>3.上传照片</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sendImg = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> cvs = <span class="built_in">document</span>.getElementById(<span class="string">"cvs"</span>);</span><br><span class="line">    <span class="comment">//调用Canvas的toDataURL接口，得到的是照片文件的base64编码string</span></span><br><span class="line">	<span class="keyword">var</span> data = cvs.toDataURL(<span class="string">"image/jpeg"</span>);</span><br><span class="line">	<span class="comment">//base64 string过短显然就不是正常的图片数据了，过滤の。</span></span><br><span class="line">	<span class="keyword">if</span>(data.length&lt;<span class="number">48</span>)&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">"image data error."</span>);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//图片的base64 string格式是data:/image/jpeg;base64,xxxxxxxxxxx</span></span><br><span class="line">	<span class="comment">//是以data:/image/jpeg;base64,开头的，我们在服务端写入图片数据的时候不需要这个头！</span></span><br><span class="line">	<span class="comment">//所以在这里只拿头后面的string</span></span><br><span class="line">	<span class="comment">//当然这一步可以在服务端做，但让闲着蛋疼的客户端帮着做一点吧~~~（稍微减轻一点服务器压力）</span></span><br><span class="line">	data = data.split(<span class="string">","</span>)[<span class="number">1</span>];</span><br><span class="line">	$.post(<span class="string">"./api/uploadimg"</span>,&#123;</span><br><span class="line">		fileName:<span class="string">"xxx.jpeg"</span>,</span><br><span class="line">		fileData:data</span><br><span class="line">	&#125;,<span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(data.status==<span class="number">200</span>)&#123;</span><br><span class="line">		    <span class="comment">// some code here.</span></span><br><span class="line">			<span class="built_in">console</span>.log(<span class="string">"commit image success."</span>);</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="built_in">console</span>.log(<span class="string">"commit image failed."</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;,<span class="string">"json"</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>看完上面的代码，是不是觉得也没那么难？真的是这样吗？code旅途艰辛，显然没那么容易就让你好过。</p>
+<p>测试后发现，在pc上以及大部分android和iphone4s+上是正常的，但是极小部分android和iphone4s以下的机型上得到的照片居然是不完整的！比如只有上半部分，下半部分是黑的，或者照片是旋转的！开始以为是服务端图片存储的时候出了问题，不过后面排除了服务端的问题，看来上面代码是有兼容性问题的。</p>
+<p>具体排除问题的过程很复杂纠结，就不细说了。贴几个帖子：</p>
+<p>1.<a href="http://stackoverflow.com/questions/11929099/html5-canvas-drawimage-ratio-bug-ios" target="_blank" rel="external">HTML5 Canvas drawImage ratio bug iOS</a></p>
+<p>2.<a href="http://stackoverflow.com/questions/19432269/ios-html5-canvas-drawimage-vertical-scaling-bug-even-for-small-images" target="_blank" rel="external">iOS HTML5 canvas drawImage vertical scaling bug, even for <em>small</em> images?</a></p>
+<p>3.<a href="http://stackoverflow.com/questions/24998317/drawing-on-canvas-after-megapix-rendering-is-reversed" target="_blank" rel="external">Drawing on canvas after megapix rendering is reversed</a></p>
+<p>主要是低版本的ios safari上面对于大尺寸的照片（超过设备的物理像素）处理的bug，导致的现象就是上半部分是照片下半部分是黑的，我们需要一个工具将一张大图切成若干个小于屏幕尺寸的小图，分别对小图进行处理然后再合并成一张图片。原理很简单，但实现起来就没那么简单了，还是已经有相关的开源工具来完成这个工作。</p>
+<p><a href="https://github.com/stomita/ios-imagefile-megapixel" target="_blank" rel="external">Fixes iOS6 Safari’s image file rendering issue for large size image (over mega-pixel), which causes unexpected subsampling when drawing it in canvas.</a></p>
+<p>剩下一个图片旋转的问题，其实每张图片拍摄后<code>EXIF</code>里面都带有旋转<code>Orientation</code>字段来标注图片的旋转信息的，也就是说其实图片本身就是倒着的，但是图片展示的时候通过读取<code>Orientation</code>来修正图片展示，使图片能按照拍摄的角度展示，所以我们在写入图片数据的时候需要按照图片本身的<code>Orientation</code>来写入数据，这样我们就需要拿到图片本身的<code>EXIF</code>信息。</p>
+<p><a href="https://github.com/jseidelin/exif-js" target="_blank" rel="external">JavaScript library for reading EXIF image metadata</a></p>
+<p>ok，问题终于全部排除完毕啦。那么经过优化后的完整代码就是：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//绑定input change事件</span></span><br><span class="line">$(<span class="string">"#photo"</span>).unbind(<span class="string">"change"</span>).on(<span class="string">"change"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> file = <span class="keyword">this</span>.files[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">if</span>(file)&#123;</span><br><span class="line">        <span class="comment">//验证图片文件类型</span></span><br><span class="line">        <span class="keyword">if</span>(file.type &amp;&amp; !<span class="regexp">/image/i</span>.test(file.type))&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">var</span> reader = <span class="keyword">new</span> FileReader();</span><br><span class="line">        reader.onload = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">            <span class="comment">//readAsDataURL后执行onload，进入图片压缩逻辑</span></span><br><span class="line">            <span class="comment">//e.target.result得到的就是图片文件的base64 string</span></span><br><span class="line">            render(file,e.target.result);  </span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="comment">//以dataurl的形式读取图片文件</span></span><br><span class="line">        reader.readAsDataURL(file);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//定义照片的最大高度</span></span><br><span class="line"><span class="keyword">var</span> MAX_HEIGHT = <span class="number">480</span>;</span><br><span class="line"><span class="keyword">var</span> render = <span class="function"><span class="keyword">function</span>(<span class="params">file,src</span>)</span>&#123;</span><br><span class="line">	EXIF.getData(file,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	    <span class="comment">//获取照片本身的Orientation</span></span><br><span class="line">		<span class="keyword">var</span> orientation = EXIF.getTag(<span class="keyword">this</span>, <span class="string">"Orientation"</span>);</span><br><span class="line">		<span class="keyword">var</span> image = <span class="keyword">new</span> Image();</span><br><span class="line">		image.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">			<span class="keyword">var</span> cvs = <span class="built_in">document</span>.getElementById(<span class="string">"cvs"</span>);</span><br><span class="line">			<span class="keyword">var</span> w = image.width;</span><br><span class="line">			<span class="keyword">var</span> h = image.height;</span><br><span class="line">			<span class="comment">//计算压缩后的图片长和宽</span></span><br><span class="line">			<span class="keyword">if</span>(h&gt;MAX_HEIGHT)&#123;</span><br><span class="line">				w *= MAX_HEIGHT/h;</span><br><span class="line">				h = MAX_HEIGHT;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">//使用MegaPixImage封装照片数据</span></span><br><span class="line">			<span class="keyword">var</span> mpImg = <span class="keyword">new</span> MegaPixImage(file);</span><br><span class="line">			<span class="comment">//按照Orientation来写入图片数据，回调函数是上传图片到服务器</span></span><br><span class="line">			mpImg.render(cvs, &#123;maxWidth:w,maxHeight:h,orientation:orientation&#125;, sendImg);</span><br><span class="line">		&#125;;</span><br><span class="line">		image.src = src;</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//上传图片到服务器</span></span><br><span class="line"><span class="keyword">var</span> sendImg = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> cvs = <span class="built_in">document</span>.getElementById(<span class="string">"cvs"</span>);</span><br><span class="line">    <span class="comment">//调用Canvas的toDataURL接口，得到的是照片文件的base64编码string</span></span><br><span class="line">    <span class="keyword">var</span> data = cvs.toDataURL(<span class="string">"image/jpeg"</span>);</span><br><span class="line">    <span class="comment">//base64 string过短显然就不是正常的图片数据了，过滤の。</span></span><br><span class="line">    <span class="keyword">if</span>(data.length&lt;<span class="number">48</span>)&#123;</span><br><span class="line">    	<span class="built_in">console</span>.log(<span class="string">"data error."</span>);</span><br><span class="line">    	<span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//图片的base64 string格式是data:/image/jpeg;base64,xxxxxxxxxxx</span></span><br><span class="line">    <span class="comment">//是以data:/image/jpeg;base64,开头的，我们在服务端写入图片数据的时候不需要这个头！</span></span><br><span class="line">    <span class="comment">//所以在这里只拿头后面的string</span></span><br><span class="line">    <span class="comment">//当然这一步可以在服务端做，但让闲着蛋疼的客户端帮着做一点吧~~~（稍微减轻一点服务器压力）</span></span><br><span class="line">    data = data.split(<span class="string">","</span>)[<span class="number">1</span>];</span><br><span class="line">    $.post(<span class="string">"./api/uploadimg"</span>,&#123;</span><br><span class="line">    	fileName:<span class="string">"xxx.jpeg"</span>,</span><br><span class="line">    	fileData:data</span><br><span class="line">    &#125;,<span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">    	<span class="keyword">if</span>(data.status==<span class="number">200</span>)&#123;</span><br><span class="line">            <span class="comment">// some code here.</span></span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">"commit image success."</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">"commit image failed."</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,<span class="string">"json"</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>ok，结果一番折腾后，终于在所有设备上都能正常运行了:)</p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/" rel="tag">#javascript</a>
+          
+            <a href="/tags/html5/" rel="tag">#html5</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/09/24/单反入门 —— 手动模式参数设置/" rel="next" title="单反入门 —— 手动模式参数设置">
+                <i class="fa fa-chevron-left"></i> 单反入门 —— 手动模式参数设置
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/11/11/Restful api安全性设计/" rel="prev" title="Restful api安全性设计">
+                Restful api安全性设计 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2014/11/10/使用HTML5 File API和Canvas实现图片压缩、旋转、上传/"
+           data-title="使用HTML5 File API和Canvas实现图片压缩、旋转、上传" data-url="http://kikoroc.com/2014/11/10/使用HTML5 File API和Canvas实现图片压缩、旋转、上传/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://kikoroc.qiniudn.com/double.jpg"
+               alt="王鹏" />
+          <p class="site-author-name" itemprop="name">王鹏</p>
+          <p class="site-description motion-element" itemprop="description">生命不息折腾不止</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/kikoroc/" target="_blank" title="github">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/kikoroc/" target="_blank" title="weibo">
+                  
+                    <i class="fa fa-weibo"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#网页拍摄照片-amp-选取本地照片"><span class="nav-number">1.</span> <span class="nav-text">网页拍摄照片&选取本地照片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#照片读取、压缩"><span class="nav-number">2.</span> <span class="nav-text">照片读取、压缩</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-读取照片"><span class="nav-number">2.0.1.</span> <span class="nav-text">1.读取照片</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-压缩照片"><span class="nav-number">2.0.2.</span> <span class="nav-text">2.压缩照片</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-上传照片"><span class="nav-number">2.0.3.</span> <span class="nav-text">3.上传照片</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王鹏</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"kikoroc"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

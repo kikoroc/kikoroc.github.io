@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<!--
+	说明：本网页灵感来自于HackerZhou同学,http://love.hackerzhou.me/，在此表示感谢！
+	本网页在此基础上进行修改，仅供个人娱乐。
+	本人email：kikoroc@gmail.com
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>王鹏&田钊 - 婚礼邀请</title>
+	<meta name="viewport" content="width=device-width, initial-scale=0.5, minimum-scale=0.4, maximum-scale=0.6, user-scalable=yes"/> 
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<style type="text/css">
+		@font-face {
+			font-family: digit;
+			src: url('./assets/font/digital-7_mono.ttf') format("truetype");
+		}
+	</style>
+	<link href="./assets/css/default.css?v=1.0" type="text/css" rel="stylesheet">
+	<script type="text/javascript" src="http://cdn.staticfile.org/jquery/1.9.1/jquery.js"></script>
+	<script type="text/javascript" src="./assets/js/garden_dev.js"></script>
+    <script type="text/javascript" src="./assets/js/functions_dev.js?v=1.0"></script>
+</head>
+
+<body>
+	<div id="mainDiv">
+			<div id="loveHeart">
+				<canvas id="garden"></canvas>
+				<img src="http://kikoroc.qiniudn.com/1.jpg" id="photo2"/>
+				<div id="words">
+					<span class="comments">/**</span><br />
+					<span class="space"/><span class="comments">* welcome to wangpeng and tianzhao's wedding!</span><br />
+					<span class="space"/><span class="comments">*/</span><br />
+					<span class="keyword">function</span> welcome_to_our_wedding(){<br />
+					<span class="placeholder"/><span class="keyword">var</span> bridegroom = <span class="keyword">new</span> Person(<span class="string">"boy"</span>,<span class="string">"王鹏"</span>,<span class="string">"smart"</span>);<br />
+					<span class="placeholder"/><span class="keyword">var</span> bride = <span class="keyword">new</span> Person(<span class="string">"girl"</span>,<span class="string">"田钊"</span>,<span class="string">"beautiful"</span>);<br />
+					<span class="placeholder"/><span class="comments">// we love each other.</span><br />
+					<span class="placeholder"/>bridegroom.love(bride);<br />
+					<span class="placeholder"/>bride.love(bridegroom);<br />
+					<span class="placeholder"/><span class="comments">// our wedding is planning.</span><br />
+					<span class="placeholder"/><span class="keyword">var</span> wedding = <span class="keyword">new</span> Wedding(bridegroom,bride);<br />
+					<span class="placeholder"/>wedding.setPlace(<span class="string">"恩施州来凤县凤池大酒店(中百购物广场5楼)"</span>);<br />
+					<span class="placeholder"/>wedding.setDate(<span class="string">"2014-09-28 12:00:00"</span>);<br />
+					<span class="placeholder"/>wedding.setInviting(<span class="string">"诚邀您参加我们的婚礼！"</span>);<br />
+					<br />
+					<span class="placeholder"/>wedding.execute();
+					<br />}<br />
+					welcome_to_our_wedding();<br />
+				</div>
+				<div id="elapseClock"></div>
+			</div>
+	</div>
+	<script type="text/javascript">
+	document.addEventListener('WeixinJSBridgeReady', function onBridgeReady(){
+	    WeixinJSBridge.on('menu:share:timeline', function(argv){
+	    	WeixinJSBridge.invoke("shareTimeline", {
+	    		img_url: "http://kikoroc.qiniudn.com/1.jpg",
+	    		img_width: "480",
+	    		img_height: "480",
+	    		link: "http://kikoroc.github.io/wedding/",
+	    		desc: "诚邀您参加我们的婚礼！",
+	    		title: "王鹏&田钊 - 婚礼邀请"
+	    	}, function(e) {});
+	    });
+	});
+	</script>
+
+	<script type="text/javascript">
+		var offsetX = $("#loveHeart").width() / 2;
+		var offsetY = $("#loveHeart").height() / 2 - 55;
+		var displayMode = -1;
+		var together = new Date();
+		together.setFullYear(2014, 8, 28);
+		together.setHours(12);
+		together.setMinutes(0);
+		together.setSeconds(0);
+		together.setMilliseconds(0);
+		
+		if (!document.createElement('canvas').getContext) {
+			var msg = document.createElement("div");
+			msg.id = "errorMsg";
+			msg.innerHTML = "Your browser doesn't support HTML5!<br/>Recommend use Chrome 14+/IE 9+/Firefox 7+/Safari 4+"; 
+			document.body.appendChild(msg);
+			$("#code").css("display", "none")
+			$("#copyright").css("position", "absolute");
+			$("#copyright").css("bottom", "10px");
+		    document.execCommand("stop");
+		} else {
+			setTimeout(function () {
+				adjustWordsPosition();
+				startHeartAnimation();
+			}, 500);
+
+			timeElapse(together, displayMode);
+			setInterval(function () {
+				timeElapse(together, displayMode);
+			}, 500);
+
+			$("#words").typewriter();
+		}
+	</script>
+</body>
+</html>
