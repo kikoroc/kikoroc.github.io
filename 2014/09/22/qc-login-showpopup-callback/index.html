@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>为QC.Login.showPopup增加回调函数 | kikoroc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="问题今天开始接入qq的帐号登录功能了，主要是web端接入，使用腾讯开发平台提供的js-sdk，在文档在发现一个很好用的api，QC.Login.showPopup()这个接口能直接打开qq登录的弹窗，用法也很简单：
+1234QC.Login.showPopup(&amp;#123;   appId:&quot;11111111&quot;,   redirectURI:&quot;http://iampeng.wang/&quot;&amp;#125;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为QC.Login.showPopup增加回调函数">
+<meta property="og:url" content="http://kikoroc.com/2014/09/22/qc-login-showpopup-callback/index.html">
+<meta property="og:site_name" content="kikoroc">
+<meta property="og:description" content="问题今天开始接入qq的帐号登录功能了，主要是web端接入，使用腾讯开发平台提供的js-sdk，在文档在发现一个很好用的api，QC.Login.showPopup()这个接口能直接打开qq登录的弹窗，用法也很简单：
+1234QC.Login.showPopup(&amp;#123;   appId:&quot;11111111&quot;,   redirectURI:&quot;http://iampeng.wang/&quot;&amp;#125;">
+<meta property="og:updated_time" content="2016-04-29T09:09:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="为QC.Login.showPopup增加回调函数">
+<meta name="twitter:description" content="问题今天开始接入qq的帐号登录功能了，主要是web端接入，使用腾讯开发平台提供的js-sdk，在文档在发现一个很好用的api，QC.Login.showPopup()这个接口能直接打开qq登录的弹窗，用法也很简单：
+1234QC.Login.showPopup(&amp;#123;   appId:&quot;11111111&quot;,   redirectURI:&quot;http://iampeng.wang/&quot;&amp;#125;">
+  
+    <link rel="alternate" href="/atom.xml" title="kikoroc" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">kikoroc</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://kikoroc.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-qc-login-showpopup-callback" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/09/22/qc-login-showpopup-callback/" class="article-date">
+  <time datetime="2014-09-21T16:00:00.000Z" itemprop="datePublished">2014-09-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/javascript/">javascript</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      为QC.Login.showPopup增加回调函数
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>今天开始接入qq的帐号登录功能了，主要是web端接入，使用腾讯开发平台提供的<a href="http://wiki.connect.qq.com/js_sdk%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E" target="_blank" rel="external">js-sdk</a>，在文档在发现一个很好用的api，<code>QC.Login.showPopup()</code>这个接口能直接打开qq登录的弹窗，用法也很简单：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">QC.Login.showPopup(&#123;</span><br><span class="line">   appId:<span class="string">"11111111"</span>,</span><br><span class="line">   redirectURI:<span class="string">"http://iampeng.wang/"</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>实际使用中，发现需要一个登录成功后的回调函数，但是<code>QC.Login.showPopuo()</code>接口并没有提供任何回调函数。</p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>在剩下的文档中，发现<code>QC.Login()</code>这个接口是提供回调函数的，用法如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">QC.Login(&#123;</span><br><span class="line">    btnId:<span class="string">"loginBtn"</span></span><br><span class="line">&#125;,loginCallback,logoutCallback);</span><br></pre></td></tr></table></figure>
+<p><code>QC.Login()</code>接口分别提供了两个可选的回调函数，<code>loginCallback</code>是登录成功后的回调，<code>logoutCallback</code>是注销登录成功后的回调。<br>那么，可不可以把<code>QC.Login()</code>和<code>QC.Login.showPopup()</code>这两个接口组合起来实现呢？</p>
+<blockquote>
+<p>在腾讯开发平台的<a href="http://wiki.connect.qq.com/js_sdk%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E" target="_blank" rel="external">js-sdk</a>中提到：<strong>如果已使用QC.Login方法，则不需再使用此方法（QC.Login.showPopup）</strong>。</p>
+</blockquote>
+<p>虽然是这么说，但是貌似还只有这么做才行，接下来的做法就是：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">QC.Login(&#123;&#125;,<span class="function"><span class="keyword">function</span>(<span class="params">data,ops</span>)</span>&#123;</span><br><span class="line">	<span class="comment">// your callback here.</span></span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">"login success!"</span>);</span><br><span class="line">&#125;);</span><br><span class="line">QC.Login.showPopup(&#123;</span><br><span class="line">	appId:<span class="string">"111111"</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>运行后发现完美解决问题：）<br>虽然暂时还没来得及看js-sdk的源码，但基本猜测得到原理，<code>QC.Login.showPopup</code>只是提供直接提供一个登录的弹窗，具体的登录逻辑肯定还是调用<code>QC.Login</code>来实现的，所以在<code>QC.Login</code>中添加登录成功的回调函数同样有效。等有时间再一探究竟~</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://kikoroc.com/2014/09/22/qc-login-showpopup-callback/" data-id="cinliqupu0001dg0cj9r1eyre" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/09/24/eos-70d-basic-1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          单反入门 —— 手动模式参数设置
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/09/20/weibo-login-access-token/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">新浪微博WB2.login授权登录获取帐号信息以及Access_token的解决办法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/restful/">restful</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/单反入门/">单反入门</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2014/11/26/spring-mvc-resources-handler/">Spring MVC静态资源处理</a>
+          </li>
+        
+          <li>
+            <a href="/2014/11/19/security-of-oauth/">第三方帐号OAuth授权登录安全问题</a>
+          </li>
+        
+          <li>
+            <a href="/2014/11/11/rest-api-secure-without-oauth/">Restful api安全性设计</a>
+          </li>
+        
+          <li>
+            <a href="/2014/11/10/html5-fileapi-canvas-image/">使用HTML5 File API和Canvas实现图片压缩、旋转、上传</a>
+          </li>
+        
+          <li>
+            <a href="/2014/09/24/eos-70d-basic-1/">单反入门 —— 手动模式参数设置</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 王鹏<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
