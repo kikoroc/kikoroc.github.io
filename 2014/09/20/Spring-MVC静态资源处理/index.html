@@ -86,7 +86,7 @@
 <meta property="og:url" content="http://kikoroc.com/2014/09/20/Spring-MVC静态资源处理/index.html">
 <meta property="og:site_name" content="kikoroc">
 <meta property="og:description" content="在前几年的web开发中，url通常是以.do、.action、.xhtml等等作为结尾，现在是Rest的时代，这样的url显得非常ugly。老版本的Spring MVC不能很好的处理静态资源，所以在web.xml中通常配置DispatcherServlet的url-pattern类似.do、.action这种。因为如果请求映射配置成/的话，Spring MVC将拦截所有的请求（当然包括静态资源的请">
-<meta property="og:updated_time" content="2016-04-29T11:09:36.000Z">
+<meta property="og:updated_time" content="2016-04-29T11:58:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring MVC静态资源处理">
 <meta name="twitter:description" content="在前几年的web开发中，url通常是以.do、.action、.xhtml等等作为结尾，现在是Rest的时代，这样的url显得非常ugly。老版本的Spring MVC不能很好的处理静态资源，所以在web.xml中通常配置DispatcherServlet的url-pattern类似.do、.action这种。因为如果请求映射配置成/的话，Spring MVC将拦截所有的请求（当然包括静态资源的请">
@@ -307,6 +307,7 @@
 <p>那么怎么样在配置请求映射为<code>\</code>的情况下，让Spring MVC能拦截所有请求，同时将静态资源的请求交给web服务器来处理呢？在Spring3.0的版本中，Spring的团队给出了两种解决方案。</p>
 <h3 id="web-xml中DispatcherServlet配置"><a href="#web-xml中DispatcherServlet配置" class="headerlink" title="web.xml中DispatcherServlet配置"></a>web.xml中DispatcherServlet配置</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>springmvc<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>org.springframework.web.servlet.DispatcherServlet<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">load-on-startup</span>&gt;</span>1<span class="tag">&lt;/<span class="name">load-on-startup</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>springmvc<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>通过上面的配置，让Spring MVC拦截所有的请求。</p>
+<a id="more"></a>
 <h3 id="方案一：-lt-mvc-default-servlet-handler-gt"><a href="#方案一：-lt-mvc-default-servlet-handler-gt" class="headerlink" title="方案一：&lt;mvc:default-servlet-handler /&gt;"></a>方案一：<code>&lt;mvc:default-servlet-handler /&gt;</code></h3><p>在springmvc-servlet.xml中配置了<code>&lt;mvc:default-servlet-handler /&gt;</code>之后，将在Spring MVC的context中定义一个<code>org.springframework.web.servlet.resource.DefaultServletHttpRequestHandler</code>类，这个类会检查每一个进入DispatcherServlet的url，如果是静态资源的请求，就将该请求转发给web服务器默认的servlet处理，如果是正常的业务请求则交由DispatcherServlet处理。</p>
 <p>上文提到web服务器默认的servlet，一般的web服务器默认servlet命名为“default”，因此<code>DefaultServletHttpRequestHandler</code>能找到它并将静态资源请求转发给它处理，如果你所使用的web服务器默认的servlet名称不是“default”，可以通过<code>default-servlet-name</code>属性来指定：</p>
 <figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;mvc:<span class="keyword">default</span>-servlet-<span class="keyword">handler</span> <span class="keyword">default</span>-servlet-name=<span class="string">"xxx"</span> /&gt;</span><br></pre></td></tr></table></figure>
@@ -449,7 +450,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

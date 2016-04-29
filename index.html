@@ -308,36 +308,14 @@
 
       
         
-          
-            <p>在我们做产品的时候，选择第三方帐号登录的设计，对于用户而言的确是很方便，可以省去用户注册的流程，用户也不用费心去记多一个帐号和密码，可以用QQ、微博等帐号玩遍天下，而且使用第三方帐号系统可以更好的与第三方系统集成，更方便的与好友分享和互动。</p>
+          <p>在我们做产品的时候，选择第三方帐号登录的设计，对于用户而言的确是很方便，可以省去用户注册的流程，用户也不用费心去记多一个帐号和密码，可以用QQ、微博等帐号玩遍天下，而且使用第三方帐号系统可以更好的与第三方系统集成，更方便的与好友分享和互动。</p>
 <h3 id="OAuth优点"><a href="#OAuth优点" class="headerlink" title="OAuth优点"></a>OAuth优点</h3><p>OAuth不会使第三方应用或者网站接触到用户的敏感数据（用户名密码等），而是通过授权后的access_token来实现用户数据交互，在http中传输的不再是用户的敏感数据而是access_token，所以即使数据包被拦截，也难以拿到用户敏感数据。这是OAuth最大的优点。</p>
-<h3 id="OAuth授权的安全隐患"><a href="#OAuth授权的安全隐患" class="headerlink" title="OAuth授权的安全隐患"></a>OAuth授权的安全隐患</h3><p>在最近的项目中，我们使用到了微博、qq、微信等第三方帐号登录功能，在接入这些第三方帐号的时候，发现一些值得思考的问题。以新浪微博的OAuth为例，在网页中接入微博登录主要使用weibo的<a href="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" target="_blank" rel="external">jssdk</a>，分析jssdk的源码我们发现，在用户通过OAuth授权登录后，jssdk将授权后weibo返回的access_token是存入cookie的。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Cookie = &#123;</span><br><span class="line">		load: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">			<span class="keyword">if</span> (!$.core.obj.isEmpty(WB2.oauthData)) &#123;</span><br><span class="line">				<span class="keyword">return</span> WB2.oauthData</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				<span class="keyword">var</span> _cookie = CookieUtil.get(<span class="string">"weibojs_"</span> + WB2._config.appkey);</span><br><span class="line">				_cookie = <span class="built_in">unescape</span>(_cookie);</span><br><span class="line">				<span class="keyword">var</span> oCookie = queryToJson(_cookie);</span><br><span class="line">				<span class="keyword">return</span> oCookie</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;,</span><br><span class="line">		save: <span class="function"><span class="keyword">function</span>(<span class="params">oCookie</span>) </span>&#123;</span><br><span class="line">			WB2.oauthData = oCookie;</span><br><span class="line">			<span class="keyword">var</span> _cookie = <span class="string">"access_token="</span> + (oCookie.access_token || <span class="string">""</span>) + <span class="string">"&amp;refresh_token="</span> + (oCookie.refresh_token || <span class="string">""</span>) + <span class="string">"&amp;expires_in="</span> + (oCookie.expires_in || <span class="number">0</span>) + <span class="string">"&amp;uid="</span> + (oCookie.uid || <span class="string">""</span>) + <span class="string">"&amp;status="</span> + (oCookie.status || USER_STATUS || <span class="number">-1</span>);</span><br><span class="line">			CookieUtil.set(<span class="string">"weibojs_"</span> + WB2._config.appkey, _cookie, &#123;</span><br><span class="line">				path: <span class="string">"/"</span>,</span><br><span class="line">				domain: <span class="built_in">document</span>.domain</span><br><span class="line">			&#125;)</span><br><span class="line">		&#125;,</span><br><span class="line">		del: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">			WB2.oauthData = &#123;&#125;;</span><br><span class="line">			CookieUtil.remove(<span class="string">"weibojs_"</span> + WB2._config.appkey, &#123;</span><br><span class="line">				path: <span class="string">"/"</span>,</span><br><span class="line">				domain: <span class="built_in">document</span>.domain</span><br><span class="line">			&#125;)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;;</span><br></pre></td></tr></table></figure>
-<p>jssdk将授权后得到的access_token、refresh_token、expires<em>in、uid、status等数据写入到以weibojs</em>{appkey}命名的cookie中，通过chrome的开发者工具，确实可以看到如下信息：</p>
-<p><img src="http://kikoroc.qiniudn.com/jssdkcookie.jpg" alt="jssdk cookie"></p>
-<p>当然，这里的安全已经不是微博能控制的了，因为这已经是在第三方站点了。设想下，如果这第三方网站存在XSS漏洞，黑客可以很容易的通过XSS漏洞拿到cookie数据，也就拿到用户的access_token，拿到这个访问令牌就能干很多坏事了，因为微博的api调用都是通过这个令牌来完成的。比如关注某个用户的api为：</p>
-<p><img src="http://kikoroc.qiniudn.com/createfri.jpg" alt="create friendship"></p>
-<p>有了用户的access_token就能很容易的让用户关注任何人了！还有更多的api来做坏事！<br>那自己的微博做了下测试，取消关注好友：</p>
-<p><img src="http://kikoroc.qiniudn.com/destoryfri.jpg" alt="destory friendship"></p>
-<p>一个简单命令行就能取消关注好友！</p>
-<h3 id="OAuth服务提供者"><a href="#OAuth服务提供者" class="headerlink" title="OAuth服务提供者"></a>OAuth服务提供者</h3><p>在大多数情况下，出问题的环节往往不是技术，而是使用技术背后的人。</p>
-<ul>
-<li>规范部署OAuth，强制SSL</li>
-<li>平台对于第三方应用严格仔细审核</li>
-</ul>
-<h3 id="第三方应用开发者"><a href="#第三方应用开发者" class="headerlink" title="第三方应用开发者"></a>第三方应用开发者</h3><ul>
-<li>自律！do no evil.</li>
-<li>安全意识和措施</li>
-</ul>
-<h3 id="广大用户"><a href="#广大用户" class="headerlink" title="广大用户"></a>广大用户</h3><ul>
-<li>防止假冒OAuth登录页面钓鱼</li>
-<li>授权前三思</li>
-<li>及时清理不必要的授权</li>
-<li>授权后观察其来源，“未审核应用”这类建议先取消授权，等其通过审核再说</li>
-</ul>
-<p>对于我们第三方应用的开发者而言，除了自律不作恶，我们还要提高我们的安全意识，为我们的程序增强安全防范措施，为用户提供安全放心的产品。ps：接下来研究下xss及其防范手段。</p>
-
-          
+<h3 id="OAuth授权的安全隐患"><a href="#OAuth授权的安全隐患" class="headerlink" title="OAuth授权的安全隐患"></a>OAuth授权的安全隐患</h3><p>在最近的项目中，我们使用到了微博、qq、微信等第三方帐号登录功能，在接入这些第三方帐号的时候，发现一些值得思考的问题。以新浪微博的OAuth为例，在网页中接入微博登录主要使用weibo的<a href="http://tjs.sjs.sinajs.cn/open/api/js/wb.js">jssdk</a>，分析jssdk的源码我们发现，在用户通过OAuth授权登录后，jssdk将授权后weibo返回的access_token是存入cookie的。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/11/19/第三方帐号OAuth授权登录安全问题/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -454,8 +432,7 @@
 
       
         
-          
-            <p>说到restful api的安全性，大家可能很快就想到OAuth2.0，的确，OAuth2.0是目前最主流和最安全的授权机制设计。但使用它的成本对于中小型应用来说还是比较高的。那么在不使用OAuth2.0的情况下如何设计restful api的安全性呢？</p>
+          <p>说到restful api的安全性，大家可能很快就想到OAuth2.0，的确，OAuth2.0是目前最主流和最安全的授权机制设计。但使用它的成本对于中小型应用来说还是比较高的。那么在不使用OAuth2.0的情况下如何设计restful api的安全性呢？</p>
 <p>业内还真有不使用OAuth2.0来做api鉴权的大公司——大名鼎鼎的<code>Amazon web service</code>。且看amazon是如何来做的，查阅amazon相关的文档我们大概知道其中设计的原理：为client生成public key和private key对，其中public key当然任何人都可以知道，或者可以叫做appid，用于server来区分是哪个client的；private key（或者可以叫做app secret）则只能是server和client知道，不可泄漏给第三方的任何人；client在做request的时候，将request的参数和取值整合成一个string，然后对这个string使用private key计算签名值（HMAC-SHA1或者SHA256之类），然后将这个签名值连同请求参数一起发送给server，server收到request之后按照同样的逻辑整合string，用同样的算法计算签名值，最后比较server生成的签名和client生成的签名是否相同，相同则client可信，继续执行业务逻辑，不相同则拒绝访问。</p>
 <p>amazon的第一版方案是这么做的：</p>
 <blockquote>
@@ -464,24 +441,11 @@
 <p>3.Append the keys and values together, in order, to construct one big string (key1 + value1 + key2 + value2 + … ).</p>
 <p>4.Sign that string using HMAC-SHA1 and your secret access key.</p>
 </blockquote>
-<p>技术是不断发展的，很快我们就发现amazon的第一版方案并不是安全的，<a href="http://www.daemonology.net/blog/2008-12.html" target="_blank" rel="external">AWS signature version 1 is insecure</a>，大概就是说这个方案存在碰撞的可能性，很简单，举个例子，<code>key=value</code>的签名和<code>ke=yvalue</code>的签名是一样的，很明显吧。所以接着有了amazon的第二版方案<a href="http://aws.amazon.com/articles/1928" target="_blank" rel="external">Making Secure Requests to Amazon Web Services</a>。感兴趣可以看看第二版方案改进的地方。</p>
-<p>那么，我们的方案就是基于amazon的思路来的：</p>
-<blockquote>
-<p>1.[Client]整合请求参数key，将key排序，连接key和value以及=和&amp;等得到string；</p>
-<p>2.[Client]我们还需要在1中的string上加上请求的URI以及Request method，得到新的string，这样我们可以避免可能有多个api的参数列表是一样的导致不安全，比如/api/update和/api/delete有同样的参数，这样算得的签名是一样的，但执行结果就完全不同；</p>
-<p>3.[Client]为了防止重放攻击，我们还需要在2中的string中增加当前请求时间戳的字段，这样server收到请求后可以计算时间间隔，超过一定时间范围的请求将拒绝访问，为了避免时区的问题，我们可以直接使用<a href="http://www.thebuzzmedia.com/understanding-the-unix-epoch-in-java-time-zones-and-utc/" target="_blank" rel="external">UTC Time</a>；</p>
-<p>4.[Client]将3中得到的string url encode后使用private key计算签名（HMAC-SHA1、HMAC-SHA256、SHA256，建议HMAC-SHA256）；</p>
-<p>5.[Client]将请求参数连同签名一起发送给server；</p>
-<p>6.[Server]收到请求后，首先获取时间戳判断请求是否过期；</p>
-<p>7.[Server]根据public key查询到对应的private key；</p>
-<p>8.[Server]按照client一样的逻辑整合请求string；</p>
-<p>9.[Server]server端计算签名；</p>
-<p>10.[Server]比较server计算的签名和客户端请求的签名，如果相同则client可信，否则拒绝访问。</p>
-</blockquote>
-<p>最后，拆屋卖瓦都要配上<code>SSL</code>！</p>
-<p>上文说到的安全性设计在理想的情况下还是不错的，这里说的理想情况是指private key在server和client都绝对安全的情况，但事实上反编译client后很容易就拿到了private key，一旦private key泄漏，安全瞬间就成浮云了-.-这个问题本人尚未探索到解决方案，慢慢来吧~</p>
-
-          
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/11/11/Restful-api安全性设计/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -598,37 +562,20 @@
 
       
         
-          
-            <p>差不多一个多月没写博客了，不过也没闲着，完成了 <strong>几件大事</strong> ：结婚、户口、驾照、买车。感觉写代码更有劲了~哈哈…</p>
+          <p>差不多一个多月没写博客了，不过也没闲着，完成了 <strong>几件大事</strong> ：结婚、户口、驾照、买车。感觉写代码更有劲了~哈哈…</p>
 <p>回到今天的主题，最近项目上有一个拍照的需求，对于客户端当然是个小问题，但是产品需要在网页版的页面上同样要实现跟客户端一样的体验！让用户可以在网页上拍照或者选取本地照片上传到服务器。</p>
 <p>看到这个需求有点蒙，首先还不确定网页如何调用系统相机，选本地照片的话弄个<code>&lt;input type=&quot;file&quot;&gt;</code>应该就ok，其次手机拍一张照片都是几兆几兆的，如果不压缩一下图片，在这蛋疼的网络环境下，基本是没办法传到服务器的，网页上的环境也就那样，怎么做图片压缩呢？</p>
 <p>####网页拍摄照片&amp;选取本地照片</p>
 <p>这个看起来很麻烦，其实很简单，网页上可以调用系统原生的照片拍摄和选取操作。直接上代码：</p>
 <figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="keyword">input</span> <span class="keyword">type</span>=<span class="string">"file"</span> id=<span class="string">"photo"</span> accept=<span class="string">"image/*"</span> <span class="keyword">capture</span>=<span class="string">"camera"</span>&gt;</span><br></pre></td></tr></table></figure>
-<p>其中，<code>accept</code>和<code>capture</code>是<a href="http://www.w3.org/TR/html-media-capture/" target="_blank" rel="external">HTML5的API</a>，这样在网页上点击这个<code>input</code>之后会弹出拍摄和选取本地照片的窗口，和native app一样。</p>
+<p>其中，<code>accept</code>和<code>capture</code>是<a href="http://www.w3.org/TR/html-media-capture/">HTML5的API</a>，这样在网页上点击这个<code>input</code>之后会弹出拍摄和选取本地照片的窗口，和native app一样。</p>
 <p>####照片读取、压缩</p>
 <p>上面说到，如果不对照片进行处理的话，一张照片就是好几兆，在2g网络下基本不可能成功上传到服务器，所以肯定需要对照片进行压缩了。我们可以使用HTML5的File API配合Canvas绘图实现照片的压缩，代码：</p>
-<p>1.读取照片</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//绑定input change事件</span></span><br><span class="line">$(<span class="string">"#photo"</span>).unbind(<span class="string">"change"</span>).on(<span class="string">"change"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> file = <span class="keyword">this</span>.files[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">if</span>(file)&#123;</span><br><span class="line">        <span class="comment">//验证图片文件类型</span></span><br><span class="line">        <span class="keyword">if</span>(file.type &amp;&amp; !<span class="regexp">/image/i</span>.test(file.type))&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">var</span> reader = <span class="keyword">new</span> FileReader();</span><br><span class="line">        reader.onload = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">            <span class="comment">//readAsDataURL后执行onload，进入图片压缩逻辑</span></span><br><span class="line">            <span class="comment">//e.target.result得到的就是图片文件的base64 string</span></span><br><span class="line">            render(e.target.result);  </span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="comment">//以dataurl的形式读取图片文件</span></span><br><span class="line">        reader.readAsDataURL(file);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>2.压缩照片</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义照片的最大高度</span></span><br><span class="line"><span class="keyword">var</span> MAX_HEIGHT = <span class="number">480</span>;</span><br><span class="line"><span class="keyword">var</span> render = <span class="function"><span class="keyword">function</span>(<span class="params">src</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> image = <span class="keyword">new</span> Image();</span><br><span class="line">	image.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="keyword">var</span> cvs = <span class="built_in">document</span>.getElementById(<span class="string">"cvs"</span>);</span><br><span class="line">		<span class="keyword">var</span> w = image.width;</span><br><span class="line">		<span class="keyword">var</span> h = image.height;</span><br><span class="line">		<span class="comment">//计算压缩后的图片长和宽</span></span><br><span class="line">		<span class="keyword">if</span>(h&gt;MAX_HEIGHT)&#123;</span><br><span class="line">			w *= MAX_HEIGHT/h;</span><br><span class="line">			h = MAX_HEIGHT;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">var</span> ctx = cvs.getContext(<span class="string">"2d"</span>);</span><br><span class="line">		cvs.width = w;</span><br><span class="line">		cvs.height = h;</span><br><span class="line">		<span class="comment">//将图片绘制到Canvas上，从原点0,0绘制到w,h</span></span><br><span class="line">		ctx.drawImage(image,<span class="number">0</span>,<span class="number">0</span>,w,h);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//进入图片上传逻辑</span></span><br><span class="line">		sendImg();</span><br><span class="line">	&#125;;</span><br><span class="line">	image.src = src;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>3.上传照片</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sendImg = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> cvs = <span class="built_in">document</span>.getElementById(<span class="string">"cvs"</span>);</span><br><span class="line">    <span class="comment">//调用Canvas的toDataURL接口，得到的是照片文件的base64编码string</span></span><br><span class="line">	<span class="keyword">var</span> data = cvs.toDataURL(<span class="string">"image/jpeg"</span>);</span><br><span class="line">	<span class="comment">//base64 string过短显然就不是正常的图片数据了，过滤の。</span></span><br><span class="line">	<span class="keyword">if</span>(data.length&lt;<span class="number">48</span>)&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">"image data error."</span>);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//图片的base64 string格式是data:/image/jpeg;base64,xxxxxxxxxxx</span></span><br><span class="line">	<span class="comment">//是以data:/image/jpeg;base64,开头的，我们在服务端写入图片数据的时候不需要这个头！</span></span><br><span class="line">	<span class="comment">//所以在这里只拿头后面的string</span></span><br><span class="line">	<span class="comment">//当然这一步可以在服务端做，但让闲着蛋疼的客户端帮着做一点吧~~~（稍微减轻一点服务器压力）</span></span><br><span class="line">	data = data.split(<span class="string">","</span>)[<span class="number">1</span>];</span><br><span class="line">	$.post(<span class="string">"./api/uploadimg"</span>,&#123;</span><br><span class="line">		fileName:<span class="string">"xxx.jpeg"</span>,</span><br><span class="line">		fileData:data</span><br><span class="line">	&#125;,<span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(data.status==<span class="number">200</span>)&#123;</span><br><span class="line">		    <span class="comment">// some code here.</span></span><br><span class="line">			<span class="built_in">console</span>.log(<span class="string">"commit image success."</span>);</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="built_in">console</span>.log(<span class="string">"commit image failed."</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;,<span class="string">"json"</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>看完上面的代码，是不是觉得也没那么难？真的是这样吗？code旅途艰辛，显然没那么容易就让你好过。</p>
-<p>测试后发现，在pc上以及大部分android和iphone4s+上是正常的，但是极小部分android和iphone4s以下的机型上得到的照片居然是不完整的！比如只有上半部分，下半部分是黑的，或者照片是旋转的！开始以为是服务端图片存储的时候出了问题，不过后面排除了服务端的问题，看来上面代码是有兼容性问题的。</p>
-<p>具体排除问题的过程很复杂纠结，就不细说了。贴几个帖子：</p>
-<p>1.<a href="http://stackoverflow.com/questions/11929099/html5-canvas-drawimage-ratio-bug-ios" target="_blank" rel="external">HTML5 Canvas drawImage ratio bug iOS</a></p>
-<p>2.<a href="http://stackoverflow.com/questions/19432269/ios-html5-canvas-drawimage-vertical-scaling-bug-even-for-small-images" target="_blank" rel="external">iOS HTML5 canvas drawImage vertical scaling bug, even for <em>small</em> images?</a></p>
-<p>3.<a href="http://stackoverflow.com/questions/24998317/drawing-on-canvas-after-megapix-rendering-is-reversed" target="_blank" rel="external">Drawing on canvas after megapix rendering is reversed</a></p>
-<p>主要是低版本的ios safari上面对于大尺寸的照片（超过设备的物理像素）处理的bug，导致的现象就是上半部分是照片下半部分是黑的，我们需要一个工具将一张大图切成若干个小于屏幕尺寸的小图，分别对小图进行处理然后再合并成一张图片。原理很简单，但实现起来就没那么简单了，还是已经有相关的开源工具来完成这个工作。</p>
-<p><a href="https://github.com/stomita/ios-imagefile-megapixel" target="_blank" rel="external">Fixes iOS6 Safari’s image file rendering issue for large size image (over mega-pixel), which causes unexpected subsampling when drawing it in canvas.</a></p>
-<p>剩下一个图片旋转的问题，其实每张图片拍摄后<code>EXIF</code>里面都带有旋转<code>Orientation</code>字段来标注图片的旋转信息的，也就是说其实图片本身就是倒着的，但是图片展示的时候通过读取<code>Orientation</code>来修正图片展示，使图片能按照拍摄的角度展示，所以我们在写入图片数据的时候需要按照图片本身的<code>Orientation</code>来写入数据，这样我们就需要拿到图片本身的<code>EXIF</code>信息。</p>
-<p><a href="https://github.com/jseidelin/exif-js" target="_blank" rel="external">JavaScript library for reading EXIF image metadata</a></p>
-<p>ok，问题终于全部排除完毕啦。那么经过优化后的完整代码就是：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//绑定input change事件</span></span><br><span class="line">$(<span class="string">"#photo"</span>).unbind(<span class="string">"change"</span>).on(<span class="string">"change"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> file = <span class="keyword">this</span>.files[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">if</span>(file)&#123;</span><br><span class="line">        <span class="comment">//验证图片文件类型</span></span><br><span class="line">        <span class="keyword">if</span>(file.type &amp;&amp; !<span class="regexp">/image/i</span>.test(file.type))&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">var</span> reader = <span class="keyword">new</span> FileReader();</span><br><span class="line">        reader.onload = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">            <span class="comment">//readAsDataURL后执行onload，进入图片压缩逻辑</span></span><br><span class="line">            <span class="comment">//e.target.result得到的就是图片文件的base64 string</span></span><br><span class="line">            render(file,e.target.result);  </span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="comment">//以dataurl的形式读取图片文件</span></span><br><span class="line">        reader.readAsDataURL(file);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//定义照片的最大高度</span></span><br><span class="line"><span class="keyword">var</span> MAX_HEIGHT = <span class="number">480</span>;</span><br><span class="line"><span class="keyword">var</span> render = <span class="function"><span class="keyword">function</span>(<span class="params">file,src</span>)</span>&#123;</span><br><span class="line">	EXIF.getData(file,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	    <span class="comment">//获取照片本身的Orientation</span></span><br><span class="line">		<span class="keyword">var</span> orientation = EXIF.getTag(<span class="keyword">this</span>, <span class="string">"Orientation"</span>);</span><br><span class="line">		<span class="keyword">var</span> image = <span class="keyword">new</span> Image();</span><br><span class="line">		image.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">			<span class="keyword">var</span> cvs = <span class="built_in">document</span>.getElementById(<span class="string">"cvs"</span>);</span><br><span class="line">			<span class="keyword">var</span> w = image.width;</span><br><span class="line">			<span class="keyword">var</span> h = image.height;</span><br><span class="line">			<span class="comment">//计算压缩后的图片长和宽</span></span><br><span class="line">			<span class="keyword">if</span>(h&gt;MAX_HEIGHT)&#123;</span><br><span class="line">				w *= MAX_HEIGHT/h;</span><br><span class="line">				h = MAX_HEIGHT;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">//使用MegaPixImage封装照片数据</span></span><br><span class="line">			<span class="keyword">var</span> mpImg = <span class="keyword">new</span> MegaPixImage(file);</span><br><span class="line">			<span class="comment">//按照Orientation来写入图片数据，回调函数是上传图片到服务器</span></span><br><span class="line">			mpImg.render(cvs, &#123;maxWidth:w,maxHeight:h,orientation:orientation&#125;, sendImg);</span><br><span class="line">		&#125;;</span><br><span class="line">		image.src = src;</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//上传图片到服务器</span></span><br><span class="line"><span class="keyword">var</span> sendImg = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> cvs = <span class="built_in">document</span>.getElementById(<span class="string">"cvs"</span>);</span><br><span class="line">    <span class="comment">//调用Canvas的toDataURL接口，得到的是照片文件的base64编码string</span></span><br><span class="line">    <span class="keyword">var</span> data = cvs.toDataURL(<span class="string">"image/jpeg"</span>);</span><br><span class="line">    <span class="comment">//base64 string过短显然就不是正常的图片数据了，过滤の。</span></span><br><span class="line">    <span class="keyword">if</span>(data.length&lt;<span class="number">48</span>)&#123;</span><br><span class="line">    	<span class="built_in">console</span>.log(<span class="string">"data error."</span>);</span><br><span class="line">    	<span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//图片的base64 string格式是data:/image/jpeg;base64,xxxxxxxxxxx</span></span><br><span class="line">    <span class="comment">//是以data:/image/jpeg;base64,开头的，我们在服务端写入图片数据的时候不需要这个头！</span></span><br><span class="line">    <span class="comment">//所以在这里只拿头后面的string</span></span><br><span class="line">    <span class="comment">//当然这一步可以在服务端做，但让闲着蛋疼的客户端帮着做一点吧~~~（稍微减轻一点服务器压力）</span></span><br><span class="line">    data = data.split(<span class="string">","</span>)[<span class="number">1</span>];</span><br><span class="line">    $.post(<span class="string">"./api/uploadimg"</span>,&#123;</span><br><span class="line">    	fileName:<span class="string">"xxx.jpeg"</span>,</span><br><span class="line">    	fileData:data</span><br><span class="line">    &#125;,<span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">    	<span class="keyword">if</span>(data.status==<span class="number">200</span>)&#123;</span><br><span class="line">            <span class="comment">// some code here.</span></span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">"commit image success."</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">"commit image failed."</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,<span class="string">"json"</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>ok，结果一番折腾后，终于在所有设备上都能正常运行了:)</p>
-
-          
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/11/10/使用HTML5-File-API和Canvas实现图片压缩、旋转、上传/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -745,8 +692,7 @@
 
       
         
-          
-            <p>上周末去澳门入了一台梦寐以求很久的单反相机，<strong>Canon EOS 70D</strong>，日本原装进口的，所以即使在澳门买的也没比国行便宜多少-.-</p>
+          <p>上周末去澳门入了一台梦寐以求很久的单反相机，<strong>Canon EOS 70D</strong>，日本原装进口的，所以即使在澳门买的也没比国行便宜多少-.-</p>
 <p>单反相机的魅力就在于手动模式操作，然后拍出碉堡的相片。作为单反小白的我，这几天迫不及待的网上自学了下单反的手动模式操作，简单总结一下。</p>
 <p><img src="http://sz.yun.ftn.qq.com/ftn_handler/bb8f8b897de762a4015daa12f9c9099d28b36056e66f5957d8698d2977a272ff/?fname=IMG_3128.JPG&amp;cn=0&amp;cv=30111&amp;size=640*640" alt="EOS 70D"></p>
 <p><img src="http://sz.yun.ftn.qq.com/ftn_handler/e1b6124ac6e9c24bcaa76e8cd8ab15853130f2688bb6f6fae8bb2efe99ee2ef2/?fname=IMG_3124.JPG&amp;cn=0&amp;cv=30111&amp;size=640*640" alt="EOS 70D"></p>
@@ -759,38 +705,11 @@
 <p>4.<strong>中央重点测光：</strong>兼顾目标与环境的测光模式，中庸，比如拍旅游的合影。</p>
 </blockquote>
 <p><code>白平衡</code>：控制相机的色彩还原，相机里面一般预设了很多白平衡模式，如日光灯、自然光、钨丝灯、阳光、阴天等场景，拿捏不准的时候可以直接使用自动白平衡模式，熟悉了之后可以使用用户自定义模式（慢慢锻炼吧）。自定义模式一般是设置色温，太高端，暂不研究 -.-</p>
-<p><code>AutoFucos自动对焦模式</code>：分为One Shot、AI Focus、AI Servo.</p>
-<blockquote>
-<p>主要设定目标的运动情况。</p>
-<p>1.<strong>One Shot：</strong>单次对焦，用于拍摄相对静止，运动幅度不大的情况；</p>
-<p>2.<strong>AI Focus：</strong>连续对焦，用于拍摄运动幅度较大或者跟拍的情况；</p>
-<p>3.<strong>AI Servo：</strong>人工智能伺服自动对焦模式（好高大上的叫法），智能识别目标的运动情况，静止时切换到One shot，运动时切换到AI Servo，用于拍摄不确定运动情况的目标，比如2-3岁的baby…待试 :)</p>
-</blockquote>
-<p><code>Drive驱动模式</code>：用于设定按快门之后相机的拍摄模式，分为单拍、高速连拍、低速连拍、定时自拍等，so easy</p>
-<p><code>ISO</code>：iso是指相机的相对感光度，设定相机的光线的需求。</p>
-<blockquote>
-<p>以下iso值用于参考。</p>
-<p><strong>100~400:</strong>天气晴朗的室外</p>
-<p><strong>400~1600:</strong>阴天或者傍晚</p>
-<p><strong>1600~6400,H:</strong>黑暗的室内或者夜间</p>
-<p>只要光线足够一般使用尽量低的iso值，iso太高的话照片容易有噪点</p>
-</blockquote>
-<p><code>曝光补偿</code>：设置相机对闪光灯的采光程度。</p>
-<blockquote>
-<p>这个不太好讲，分别举栗子。</p>
-<p><strong>减少曝光补偿：</strong>在黑夜拍摄人像，由于闪光灯的干涉可能拍出来的人脸上鼻子额头等太亮太白，这属于曝光过度，是相机的错误预判造成的，这时候我们将闪光补偿设为负值（-1、-2等）来纠正相机对光补偿的设定；</p>
-<p><strong>增加曝光补偿：</strong>有时候我们拍摄的物体在闪光灯的干涉下还是无法得到合适的曝光度，这时候就可以增加曝光补偿来实现，将闪光补偿设为正值（1、2等）就能得到满意的曝光。ps：还有的情况曝光补偿已经设置到正的最大了，配合闪光灯还是得不到满意的曝光，这一般是由于目标太远超出了闪光灯的有效范围，因为相机自带的闪光灯光线衰减很快，有效补光距离只有4米左右，这种情况需要外置闪光灯等专业器材才行。</p>
-<p>一般负补偿偏多。</p>
-</blockquote>
-<p><code>自动对焦点选择</code>：设定目标在构图中的位置，这个好理解。</p>
-<p><code>快门速度</code>：主拨盘控制快门速度（控制进光时间、曝光时间）。</p>
-<p><code>光圈</code>：辅拨盘控制光圈大小，跟快门一起控制曝光时间。ps：要打开光圈的控制键（辅拨盘下面那个）才能操作光圈大小。</p>
-<blockquote>
-<p>上面说到好几个环节都是控制曝光时间的，那么如何确定获得准确的曝光呢？主要是看取景框下方那个游标尺（跟曝光补偿的游标尺很像），这个叫内部测光表，范围在-2到2之间，一般负值的时候曝光不足，正值的时候曝光过度，我们要做的就是调节快门和光圈将游标调节到尽量接近0，这是曝光基本就是准确的了。</p>
-</blockquote>
-<p>不断试玩中，期待我的摄影作品吧~  哈哈…</p>
-
-          
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/09/24/单反入门-——-手动模式参数设置/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -907,21 +826,16 @@
 
       
         
-          
-            <h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>今天开始接入qq的帐号登录功能了，主要是web端接入，使用腾讯开发平台提供的<a href="http://wiki.connect.qq.com/js_sdk%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E" target="_blank" rel="external">js-sdk</a>，在文档在发现一个很好用的api，<code>QC.Login.showPopup()</code>这个接口能直接打开qq登录的弹窗，用法也很简单：</p>
+          <h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>今天开始接入qq的帐号登录功能了，主要是web端接入，使用腾讯开发平台提供的<a href="http://wiki.connect.qq.com/js_sdk%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E">js-sdk</a>，在文档在发现一个很好用的api，<code>QC.Login.showPopup()</code>这个接口能直接打开qq登录的弹窗，用法也很简单：</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">QC</span><span class="selector-class">.Login</span><span class="selector-class">.showPopup</span>(&#123;</span><br><span class="line">   <span class="attribute">appId</span>:<span class="string">"11111111"</span>,</span><br><span class="line">   redirectURI:<span class="string">"http://iampeng.wang/"</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p>实际使用中，发现需要一个登录成功后的回调函数，但是<code>QC.Login.showPopuo()</code>接口并没有提供任何回调函数。</p>
 <h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>在剩下的文档中，发现<code>QC.Login()</code>这个接口是提供回调函数的，用法如下：</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">QC</span><span class="selector-class">.Login</span>(&#123;</span><br><span class="line">    <span class="attribute">btnId</span>:<span class="string">"loginBtn"</span></span><br><span class="line">&#125;,<span class="selector-tag">loginCallback</span>,<span class="selector-tag">logoutCallback</span>);</span><br></pre></td></tr></table></figure>
-<p><code>QC.Login()</code>接口分别提供了两个可选的回调函数，<code>loginCallback</code>是登录成功后的回调，<code>logoutCallback</code>是注销登录成功后的回调。<br>那么，可不可以把<code>QC.Login()</code>和<code>QC.Login.showPopup()</code>这两个接口组合起来实现呢？</p>
-<blockquote>
-<p>在腾讯开发平台的<a href="http://wiki.connect.qq.com/js_sdk%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E" target="_blank" rel="external">js-sdk</a>中提到：<strong>如果已使用QC.Login方法，则不需再使用此方法（QC.Login.showPopup）</strong>。</p>
-</blockquote>
-<p>虽然是这么说，但是貌似还只有这么做才行，接下来的做法就是：</p>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">QC</span><span class="selector-class">.Login</span>(&#123;&#125;,function(data,ops)&#123;</span><br><span class="line">	<span class="comment">// your callback here.</span></span><br><span class="line">	console<span class="selector-class">.log</span>(<span class="string">"login success!"</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="selector-tag">QC</span><span class="selector-class">.Login</span><span class="selector-class">.showPopup</span>(&#123;</span><br><span class="line">	<span class="attribute">appId</span>:<span class="string">"111111"</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>运行后发现完美解决问题：）<br>虽然暂时还没来得及看js-sdk的源码，但基本猜测得到原理，<code>QC.Login.showPopup</code>只是提供直接提供一个登录的弹窗，具体的登录逻辑肯定还是调用<code>QC.Login</code>来实现的，所以在<code>QC.Login</code>中添加登录成功的回调函数同样有效。等有时间再一探究竟~</p>
-
-          
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/09/22/为QC-Login-showPopup增加回调函数/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -1038,27 +952,15 @@
 
       
         
-          
-            <p>在前几年的web开发中，url通常是以.do、.action、.xhtml等等作为结尾，现在是Rest的时代，这样的url显得非常ugly。老版本的Spring MVC不能很好的处理静态资源，所以在web.xml中通常配置<code>DispatcherServlet</code>的<code>url-pattern</code>类似.do、.action这种。因为如果请求映射配置成<code>/</code>的话，Spring MVC将拦截所有的请求（当然包括静态资源的请求），交由<code>Controller</code>处理，显然静态资源的请求到了Controller那里必然会导致<code>no handler mapping</code>的错误。</p>
+          <p>在前几年的web开发中，url通常是以.do、.action、.xhtml等等作为结尾，现在是Rest的时代，这样的url显得非常ugly。老版本的Spring MVC不能很好的处理静态资源，所以在web.xml中通常配置<code>DispatcherServlet</code>的<code>url-pattern</code>类似.do、.action这种。因为如果请求映射配置成<code>/</code>的话，Spring MVC将拦截所有的请求（当然包括静态资源的请求），交由<code>Controller</code>处理，显然静态资源的请求到了Controller那里必然会导致<code>no handler mapping</code>的错误。</p>
 <p>那么怎么样在配置请求映射为<code>\</code>的情况下，让Spring MVC能拦截所有请求，同时将静态资源的请求交给web服务器来处理呢？在Spring3.0的版本中，Spring的团队给出了两种解决方案。</p>
 <h3 id="web-xml中DispatcherServlet配置"><a href="#web-xml中DispatcherServlet配置" class="headerlink" title="web.xml中DispatcherServlet配置"></a>web.xml中DispatcherServlet配置</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>springmvc<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>org.springframework.web.servlet.DispatcherServlet<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">load-on-startup</span>&gt;</span>1<span class="tag">&lt;/<span class="name">load-on-startup</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>springmvc<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>通过上面的配置，让Spring MVC拦截所有的请求。</p>
-<h3 id="方案一：-lt-mvc-default-servlet-handler-gt"><a href="#方案一：-lt-mvc-default-servlet-handler-gt" class="headerlink" title="方案一：&lt;mvc:default-servlet-handler /&gt;"></a>方案一：<code>&lt;mvc:default-servlet-handler /&gt;</code></h3><p>在springmvc-servlet.xml中配置了<code>&lt;mvc:default-servlet-handler /&gt;</code>之后，将在Spring MVC的context中定义一个<code>org.springframework.web.servlet.resource.DefaultServletHttpRequestHandler</code>类，这个类会检查每一个进入DispatcherServlet的url，如果是静态资源的请求，就将该请求转发给web服务器默认的servlet处理，如果是正常的业务请求则交由DispatcherServlet处理。</p>
-<p>上文提到web服务器默认的servlet，一般的web服务器默认servlet命名为“default”，因此<code>DefaultServletHttpRequestHandler</code>能找到它并将静态资源请求转发给它处理，如果你所使用的web服务器默认的servlet名称不是“default”，可以通过<code>default-servlet-name</code>属性来指定：</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;mvc:<span class="keyword">default</span>-servlet-<span class="keyword">handler</span> <span class="keyword">default</span>-servlet-name=<span class="string">"xxx"</span> /&gt;</span><br></pre></td></tr></table></figure>
-<p>附Tomcat的默认servlet命名，tomcat的默认servlet命名可以在{TOMCAT_HOME_DIR}/conf/web.xml中找到：</p>
-<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;servlet&gt;</span><br><span class="line">    &lt;servlet-<span class="built_in">name</span>&gt;<span class="keyword">default</span>&lt;/servlet-<span class="built_in">name</span>&gt;</span><br><span class="line">    &lt;servlet-class&gt;org.apache.catalina.servlets.DefaultServlet&lt;/servlet-class&gt;</span><br><span class="line">    &lt;init-<span class="built_in">param</span>&gt;</span><br><span class="line">        &lt;<span class="built_in">param</span>-<span class="built_in">name</span>&gt;debug&lt;/<span class="built_in">param</span>-<span class="built_in">name</span>&gt;</span><br><span class="line">        &lt;<span class="built_in">param</span>-value&gt;<span class="number">0</span>&lt;/<span class="built_in">param</span>-value&gt;</span><br><span class="line">    &lt;/init-<span class="built_in">param</span>&gt;</span><br><span class="line">    &lt;init-<span class="built_in">param</span>&gt;</span><br><span class="line">        &lt;<span class="built_in">param</span>-<span class="built_in">name</span>&gt;listings&lt;/<span class="built_in">param</span>-<span class="built_in">name</span>&gt;</span><br><span class="line">        &lt;<span class="built_in">param</span>-value&gt;<span class="literal">false</span>&lt;/<span class="built_in">param</span>-value&gt;</span><br><span class="line">    &lt;/init-<span class="built_in">param</span>&gt;</span><br><span class="line">    &lt;<span class="built_in">load</span>-on-startup&gt;<span class="number">1</span>&lt;/<span class="built_in">load</span>-on-startup&gt;</span><br><span class="line">&lt;/servlet&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="方案二：-lt-mvc-resources-gt"><a href="#方案二：-lt-mvc-resources-gt" class="headerlink" title="方案二：&lt;mvc:resources /&gt;"></a>方案二：<code>&lt;mvc:resources /&gt;</code></h3><p><code>&lt;mvc:default-servlet-handler /&gt;</code>将静态资源请求交给web服务器默认servlet处理，而<code>&lt;mvc:resources /&gt;</code>更牛逼，由Spring MVC自行处理静态资源请求，并且提供一些优化的手段。</p>
-<p><code>&lt;mvc:resources /&gt;</code>允许将静态资源存放在任意的位置，WEB-INF，类路径等等，通过location属性指定静态资源的位置即可，打破了传统web容器静态资源只能放在根路径下的限制。</p>
-<p>而且，<code>&lt;mvc:resources /&gt;</code>根据Google page speed,yahoo yslow等浏览器优化原则对静态资源请求进行优化。比如可以通过cacheSeconds属性指定静态资源的缓存时间，充分利用客户端浏览器的缓存来提升响应能力，在response中根据配置设置响应报文头属性。</p>
-<p>在springmvc-servlet.xml中配置如下：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mvc:resources</span> <span class="attr">location</span>=<span class="string">"/"</span> <span class="attr">mapping</span>=<span class="string">"/resources/**"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
-<p>以上配置将web根路径映射为resources路径。假如根路径下有images,js目录，images里面有1.jpg,js里面有index.js等文件，则可以通过/resources/images/1.jpg和/resources/js/index.js访问这两个静态资源。</p>
-<h3 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h3><p>在实践中，方案一中的<code>default-servlet-name</code>千万不可配置错误，否则将会报错：</p>
-<figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Caused <span class="keyword">by</span>:</span><br><span class="line"></span><br><span class="line">org.springframework.web.util.NestedServletException: Request processing failed; <span class="keyword">nested</span> exception <span class="keyword">is</span> java.lang.IllegalStateException: A RequestDispatcher could <span class="keyword">not</span> be located <span class="keyword">for</span> the <span class="keyword">default</span> servlet <span class="string">'dsa'</span></span><br></pre></td></tr></table></figure>
-<p>如果将<code>default-servlet-name</code>和我们web.xml中的<code>servlet-name</code>混为一谈的话，将<code>default-servlet-name</code>设置为<code>servlet-name</code>，将会出现<code>java.lang.StackOverflowError</code>的堆栈溢出错误。</p>
-
-          
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/09/20/Spring-MVC静态资源处理/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -1175,81 +1077,13 @@
 
       
         
-          
-            <h3 id="问题1-获取帐号信息"><a href="#问题1-获取帐号信息" class="headerlink" title="问题1.获取帐号信息"></a>问题1.获取帐号信息</h3><p>最近项目中要使用到新浪微博登录，客户端的已经搞定，在网页端也需要使用微博登录功能，查了下<a href="http://open.weibo.com/" target="_blank" rel="external">微博的文档</a>，说实话写的不太好，很多地方没有清楚而且页内的链接跳转也略混乱，不过api的设计倒是不错的。在使用过程中发现，WB2.login是没有返回值的，这时候想要拿到登录用户的信息仅通过WB2.login接口是没办法做到的。</p>
+          <h3 id="问题1-获取帐号信息"><a href="#问题1-获取帐号信息" class="headerlink" title="问题1.获取帐号信息"></a>问题1.获取帐号信息</h3><p>最近项目中要使用到新浪微博登录，客户端的已经搞定，在网页端也需要使用微博登录功能，查了下<a href="http://open.weibo.com/">微博的文档</a>，说实话写的不太好，很多地方没有清楚而且页内的链接跳转也略混乱，不过api的设计倒是不错的。在使用过程中发现，WB2.login是没有返回值的，这时候想要拿到登录用户的信息仅通过WB2.login接口是没办法做到的。</p>
 <h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>继续查阅weibo-js的文档，发现了<code>/account/get_uid.json</code>（OAuth授权之后获取用户UID）和<code>/users/show.json</code>（获取用户信息）这个两个api，所以大概的思路就有了：先请求<code>/account/get_uid.json</code>获取授权用户的uid，再在请求uid的回调中调用<code>/users/show.json</code>获取用户数据。虽然这个做法比较绕，但暂时也没发现其他更好的办法，大家可以互相交流：）</p>
-<p><strong>代码实现</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">;(<span class="function"><span class="keyword">function</span>(<span class="params">$</span>)</span>&#123;</span><br><span class="line">	<span class="comment">/**</span><br><span class="line">	 * 登录新浪微博，并获取用户信息</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="keyword">var</span> loginWb = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		WB2.login(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		    <span class="comment">//检查登录是否成功</span></span><br><span class="line">			<span class="keyword">if</span>(WB2.checkLogin())&#123;</span><br><span class="line">				getWbUserData(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">					alert(<span class="string">"登录成功！"</span>);</span><br><span class="line">					<span class="built_in">console</span>.log(data);</span><br><span class="line">				&#125;);</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				alert(<span class="string">"登录新浪微博失败！"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line">	&#125;;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/**</span><br><span class="line">	 * 退出新浪微博</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="keyword">var</span> logoutWb = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		WB2.logout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">			<span class="keyword">if</span>(WB2.checkLogin())&#123;</span><br><span class="line">				alert(<span class="string">"退出新浪微博失败！"</span>);</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				alert(<span class="string">"退出新浪微博"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line">	&#125;;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/**</span><br><span class="line">	 * 获取微博用户数据</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="keyword">var</span> getWbUserData = <span class="function"><span class="keyword">function</span>(<span class="params">callback</span>)</span>&#123;</span><br><span class="line">		<span class="comment">//调用api</span></span><br><span class="line">		WB2.anyWhere(<span class="function"><span class="keyword">function</span>(<span class="params">W</span>)</span>&#123;</span><br><span class="line">			W.parseCMD(<span class="string">"/account/get_uid.json"</span>,<span class="function"><span class="keyword">function</span>(<span class="params">ret,status</span>)</span>&#123;</span><br><span class="line">				<span class="keyword">if</span>(status)&#123;</span><br><span class="line">					getData(W,ret.uid);</span><br><span class="line">				&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">					<span class="built_in">console</span>.log(<span class="string">"/account/get_uid.json 授权失败或者错误"</span>);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;,&#123;&#125;,&#123;</span><br><span class="line">				method:<span class="string">"get"</span>,</span><br><span class="line">				cache_time:<span class="number">30</span></span><br><span class="line">			&#125;);</span><br><span class="line">		&#125;);</span><br><span class="line">		<span class="function"><span class="keyword">function</span> <span class="title">getData</span>(<span class="params">W,id</span>)</span>&#123;</span><br><span class="line">			W.parseCMD(<span class="string">"/users/show.json"</span>,<span class="function"><span class="keyword">function</span>(<span class="params">ret,status</span>)</span>&#123;</span><br><span class="line">				<span class="keyword">if</span>(status)&#123;</span><br><span class="line">					callback(ret);</span><br><span class="line">				&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">					<span class="built_in">console</span>.log(<span class="string">"/users/show.json error"</span>);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;,&#123;</span><br><span class="line">				uid:id</span><br><span class="line">			&#125;,&#123;</span><br><span class="line">				method:<span class="string">"get"</span></span><br><span class="line">			&#125;);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;;</span><br><span class="line">&#125;(Zepto));</span><br></pre></td></tr></table></figure>
-<h3 id="问题2-获取access-token"><a href="#问题2-获取access-token" class="headerlink" title="问题2.获取access_token"></a>问题2.获取access_token</h3><p>授权登录，拿到帐号数据后发现，想拿到access token也是个事！其实access token在登录的时候就已经生成了的，但是weibo-js并没有提供一个简便的方式去获取access token，至少api文档里面没有提到，获取access token只有一个api <code>oauth2/accesstoken</code>，但是看看这个api的说明：</p>
-<p><strong>请求参数</strong></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left"></th>
-<th style="text-align:center">必选</th>
-<th style="text-align:center">类型及范围</th>
-<th style="text-align:left">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">client_id</td>
-<td style="text-align:center">true</td>
-<td style="text-align:center">string</td>
-<td style="text-align:left">申请应用时分配的AppKey。</td>
-</tr>
-<tr>
-<td style="text-align:left">client_secret</td>
-<td style="text-align:center">true</td>
-<td style="text-align:center">string</td>
-<td style="text-align:left">申请应用时分配的AppSecret。</td>
-</tr>
-<tr>
-<td style="text-align:left">grant_type</td>
-<td style="text-align:center">true</td>
-<td style="text-align:center">string</td>
-<td style="text-align:left">请求的类型，填写authorization code</td>
-</tr>
-</tbody>
-</table>
-<p><strong>grant type为authorization code时</strong></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left"></th>
-<th style="text-align:center">必选</th>
-<th style="text-align:center">类型及范围</th>
-<th style="text-align:left">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">code</td>
-<td style="text-align:center">true</td>
-<td style="text-align:center">string</td>
-<td style="text-align:left">调用authorize获得的code值。</td>
-</tr>
-<tr>
-<td style="text-align:left">redirect_uri</td>
-<td style="text-align:center">true</td>
-<td style="text-align:center">string</td>
-<td style="text-align:left">回调地址，需需与注册应用里的回调地址一致。</td>
-</tr>
-</tbody>
-</table>
-<p>看到这些参数就知道这不是我们想要的api：（<br>根据文档的说明，在开发的时候可以设置<code>debug=true</code>来的打印调试信息。</p>
-<figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=</span></span></span><span class="template-variable">&#123;YOUR_APPKEY&#125;</span><span class="xml"><span class="tag"><span class="string">&amp;debug=true"</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
-<p>请求授权登录后在console里面发现：</p>
-<p><img src="http://kikoroc.qiniudn.com/1411210569711.png" alt="Alt text"></p>
-<p>我们想要的access token被log出来了，显然这是wb.js的逻辑，继续查看wb.js的源码，找到<code>console.log</code>的地方。</p>
-<p><img src="http://kikoroc.qiniudn.com/1411210702079.png" alt="Alt text"></p>
-<p>哈哈，被log的data数据接着被<code>Cookie.save(data)</code>了。<br>继续看cookie信息，果然是有一个key为weibojs接一串数字，value则是access token等信息。而且weibojs后面那个数字正是我们申请到的app key，接下来就好做了，拿到这个cookie数据，解析出access token即可。</p>
-<p><img src="http://kikoroc.qiniudn.com/1411210778626.png" alt="Alt text"></p>
-<p>我这里是用到zepto.js库，zepto没有自带cookie相关api的，找到<a href="https://github.com/kennx/Zepto-Cookie" target="_blank" rel="external">zepto的cookie扩展</a>，获取access token的代码：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> getAccessToken = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> cookie = $.fn.cookie(<span class="string">"weibojs_&#123;your_appkey&#125;"</span>);</span><br><span class="line">	<span class="keyword">return</span> cookie.split(<span class="string">"&amp;"</span>)[<span class="number">0</span>].split(<span class="string">"="</span>)[<span class="number">1</span>];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>搞定收工！</p>
-
-          
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/09/20/新浪微博WB2-login授权登录获取帐号信息以及Access-token的解决办法/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -1334,7 +1168,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
