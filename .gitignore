@@ -4,3 +4,4 @@ _site/
 node_modules/
 .deploy_git/
 db.json
+.DS_Store
