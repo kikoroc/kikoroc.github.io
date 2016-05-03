@@ -1,0 +1,648 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="redis,best practice," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="redis是一款开源的内存数据存储系统，可以用作数据库、缓存甚至是消息中间件（pub/sub）来使用。与memcache相比，redis支持更多的数据结构，比如string,hash,list,set,bit map,sorted set甚至是geo等等，基本覆盖了日常开发中使用到的数据结构。而且redis十分高效，当然是建立在合理使用的前提下。由于redis单线程的设计特性，任何一条阻塞的命令">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis最佳实践">
+<meta property="og:url" content="http://kikoroc.com/2016/05/03/Redis最佳实践/index.html">
+<meta property="og:site_name" content="kikoroc">
+<meta property="og:description" content="redis是一款开源的内存数据存储系统，可以用作数据库、缓存甚至是消息中间件（pub/sub）来使用。与memcache相比，redis支持更多的数据结构，比如string,hash,list,set,bit map,sorted set甚至是geo等等，基本覆盖了日常开发中使用到的数据结构。而且redis十分高效，当然是建立在合理使用的前提下。由于redis单线程的设计特性，任何一条阻塞的命令">
+<meta property="og:updated_time" content="2016-05-03T04:32:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis最佳实践">
+<meta name="twitter:description" content="redis是一款开源的内存数据存储系统，可以用作数据库、缓存甚至是消息中间件（pub/sub）来使用。与memcache相比，redis支持更多的数据结构，比如string,hash,list,set,bit map,sorted set甚至是geo等等，基本覆盖了日常开发中使用到的数据结构。而且redis十分高效，当然是建立在合理使用的前提下。由于redis单线程的设计特性，任何一条阻塞的命令">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6224350115549677000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Redis最佳实践 | kikoroc </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?0dc5cea21c95c5e7b651894720cf278c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">kikoroc</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Redis最佳实践
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-03T10:16:55+08:00" content="2016-05-03">
+              2016-05-03
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/03/Redis最佳实践/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/03/Redis最佳实践/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p><a href="http://redis.io/" target="_blank" rel="external">redis</a>是一款开源的内存数据存储系统，可以用作数据库、缓存甚至是消息中间件（pub/sub）来使用。与memcache相比，redis支持更多的数据结构，比如string,hash,list,set,bit map,sorted set甚至是geo等等，基本覆盖了日常开发中使用到的数据结构。而且redis十分高效，当然是建立在合理使用的前提下。由于redis单线程的设计特性，任何一条阻塞的命令都会引起redis整个实例的阻塞，所以在使用过程中，需要尽量避免过多使用时间复杂度高的命令（特别是高并发的环境下），一般我们可以通过查看redis command的时间复杂度，但实际使用情况中还是会遇到不少坑，本文主要记录工作中遇到的redis问题，持续更新~~~</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="找出引起redis慢的原因"><a href="#找出引起redis慢的原因" class="headerlink" title="找出引起redis慢的原因"></a>找出引起redis慢的原因</h2><h3 id="slowlog-get"><a href="#slowlog-get" class="headerlink" title="slowlog get"></a>slowlog get</h3><p>通常我们可以通过redis慢日志来找到引起redis慢的命令，用法为<code>slowlog get 10</code>来查看最慢的10条命令，然后针对性的进行优化。慢日志可以通过redis.conf或者运行时通过：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CONFIG <span class="keyword">SET</span> slowlog-<span class="keyword">log</span>-slower-<span class="keyword">than</span> <span class="number">5000</span>  </span><br><span class="line">CONFIG <span class="keyword">SET</span> slowlog-<span class="keyword">max</span>-<span class="keyword">len</span> <span class="number">25</span></span><br></pre></td></tr></table></figure></p>
+<p>来设置slowlog参数，其中<code>slowlog-log-slower-than</code>表示执行时间超过该值（单位毫秒）的命令记为慢查询，<code>slowlog-max-len</code>可以设置记录的最大条数。可以通过<code>slowlog reset</code>命令来重置慢日志记录。</p>
+<h3 id="info-commandstats"><a href="#info-commandstats" class="headerlink" title="info commandstats"></a>info commandstats</h3><p><code>info commandstats</code>命令会告诉你整个redis执行了哪些命令、分别执行了多少次、总计耗时、平均每次耗时等信息，同时可以通过<code>config resetstat</code>命令来重置统计。</p>
+<h3 id="client-list"><a href="#client-list" class="headerlink" title="client list"></a>client list</h3><p><code>redis-cli -h localhost -p 6379 client list | grep -v &quot;omem=0&quot;</code>这条命令在排查redis慢的时候绝对是神技。一般阻塞的命令都会导致omem不断升高，这条命令能快速找到引起阻塞的命令，返回的数据:<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">id=<span class="number">1212</span> addr=<span class="number">10.10</span><span class="number">.10</span><span class="number">.10</span>:<span class="number">34234</span> fd=<span class="number">11</span> name= age=<span class="number">3242</span> idle=<span class="number">1</span> flags=N db=<span class="number">0</span> sub=<span class="number">0</span> psub=<span class="number">0</span> multi=<span class="number">-1</span> qbuf=<span class="number">0</span> qbuf-free=<span class="number">0</span> obl=<span class="number">0</span> oll=<span class="number">232432</span> omem=<span class="number">23132432</span> events=rw cmds=<span class="built_in">keys</span> *</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">引起阻塞的具体命令，甚至发起命令的机器ip都能查到。</span><br><span class="line"></span><br><span class="line"><span class="comment">## scan instead of keys *</span></span><br><span class="line"></span><br><span class="line">在key数量较少的情况下，我们可以偷懒直接使用`<span class="built_in">keys</span> *`来快速查看模式匹配的key列表，但是一旦key数量上升，或者在高并发的环境下，`<span class="built_in">keys</span> *`会带来整个系统的阻塞。因为`<span class="built_in">keys</span>`命令时间复杂度是：</span><br><span class="line"></span><br><span class="line">&gt; **Time complexity**:O(N) <span class="keyword">with</span> N being <span class="keyword">the</span> <span class="built_in">number</span> <span class="keyword">of</span> <span class="built_in">keys</span> <span class="keyword">in</span> <span class="keyword">the</span> database, under <span class="keyword">the</span> assumption that <span class="keyword">the</span> key names <span class="keyword">in</span> <span class="keyword">the</span> database <span class="keyword">and</span> <span class="keyword">the</span> given pattern have limited <span class="built_in">length</span>.</span><br><span class="line"></span><br><span class="line">直接跟database中key数量相关的。替代方案是使用`scan`命令，首先看看`scan`的时间复杂度：</span><br><span class="line"></span><br><span class="line">&gt; **Time complexity**:O(<span class="number">1</span>) <span class="keyword">for</span> every call. O(N) <span class="keyword">for</span> <span class="keyword">a</span> complete iteration, including enough <span class="keyword">command</span> <span class="title">calls</span> <span class="title">for</span> <span class="title">the</span> <span class="title">cursor</span> <span class="title">to</span> <span class="title">return</span> <span class="title">back</span> <span class="title">to</span> <span class="title">0</span>. <span class="title">N</span> <span class="title">is</span> <span class="title">the</span> <span class="title">number</span> <span class="title">of</span> <span class="title">elements</span> <span class="title">inside</span> <span class="title">the</span> <span class="title">collection</span>.</span><br><span class="line"></span><br><span class="line">虽然scan不能一次性返回所有匹配的key，但是scan提供cursor机制来遍历整个database，最重要的是每次scan操作的时间复杂度是O(<span class="number">1</span>)的，因此只需要多次scan即可得到所有匹配的key。类似的命令还有`sscan`,`hscan`,`zscan`等分别用于增量迭代<span class="built_in">set</span>,hash,sorted <span class="built_in">set</span>等集合元素。</span><br></pre></td></tr></table></figure></p>
+<p>var scan = function(offset){<br>  (function(offset){<br>    redis.scan([offset, ‘match’, ‘key<em>pattern</em>*’, ‘count’, 1000], function(err, ret){<br>      if(!!err){<br>        console.error(err);<br>        process.exit(-1);<br>      }<br>      if(Number(ret[0] === 0)){<br>        console.log(‘scan finished’);<br>        process.exit(0);<br>      }<br>      // matched keys in ret[1]<br>      // deal with keys<br>      // scan again.<br>      scan(Number(ret[0]));<br>    });<br>  })(offset);<br>};</p>
+<p>scan(0);<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">## 使用redis slave</span></span><br><span class="line"></span><br><span class="line">同使用其他数据库一样，读写分离总是能极大的提升系统在高并发情况下的性能，redis也不例外。</span><br><span class="line"></span><br><span class="line"><span class="comment">### 一主多从</span></span><br><span class="line"></span><br><span class="line">通常一主多从可以用来实现读写分离，而且能间接的保证数据安全性（master挂了slave还有数据），所以通常比较好的部署结构是M-S-S，即在slave下部署slave而不是全部部署为master的slave，这样master挂了可以将一级slave快速切换为master使用。</span><br><span class="line"></span><br><span class="line"><span class="comment">### 多写</span></span><br><span class="line"></span><br><span class="line">多写一般用于写操作很频繁的情况，这时一般需要业务上进行额外的处理，或者更好的办法是增加redis proxy类的中间件来对业务隔离多写的复杂性。</span><br><span class="line"></span><br><span class="line"><span class="comment">## DEL操作隐藏的问题</span></span><br><span class="line"></span><br><span class="line">之前一直以为`del`操作不会有性能问题，直到我的膝盖中了一箭...</span><br><span class="line">因为只记得`del`对于<span class="keyword">string</span>和hash的时间复杂度是O(<span class="number">1</span>)的，但是对于list,<span class="built_in">set</span>,sorted <span class="built_in">set</span>等居然是O(N)的，所以当你准备使用del来删除一个有百万级数据的集合，那你就准备阻塞吧...  </span><br><span class="line"></span><br><span class="line">&gt;**Time complexity**:O(N) where N is <span class="keyword">the</span> <span class="built_in">number</span> <span class="keyword">of</span> <span class="built_in">keys</span> that will be removed. When <span class="keyword">a</span> key <span class="built_in">to</span> remove holds <span class="keyword">a</span> <span class="built_in">value</span> other than <span class="keyword">a</span> <span class="keyword">string</span>, <span class="keyword">the</span> individual complexity <span class="keyword">for</span> this key is O(M) where M is <span class="keyword">the</span> <span class="built_in">number</span> <span class="keyword">of</span> elements <span class="keyword">in</span> <span class="keyword">the</span> list, <span class="built_in">set</span>, sorted <span class="built_in">set</span> <span class="keyword">or</span> hash. Removing <span class="keyword">a</span> single key that holds <span class="keyword">a</span> <span class="keyword">string</span> <span class="built_in">value</span> is O(<span class="number">1</span>).</span><br><span class="line"></span><br><span class="line">我们的方案是：不直接删除这种大的集合，而是将他们重命名(确认是O(<span class="number">1</span>)的，不用担心:D)，然后后台跑一个删除进程慢慢删。。。   </span><br><span class="line">首先，将程序中del大集合修改为<span class="built_in">rename</span>：</span><br></pre></td></tr></table></figure></p>
+<p>//cmds.push([‘del’, ‘bigset’]);<br>cmds.push([‘rename’, ‘bigset’, ‘gc:bigset’]);<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">接下来部署删除函数：</span><br></pre></td></tr></table></figure></p>
+<p>var delHugeSet = function(key, cb){<br>    redis.scard(key, function(err, size){<br>        if(size&gt;500){<br>            redis.srandmember(key, 500, function(err, ids){<br>                //分批慢慢删<br>                redis.srem(key, ids, function(err, ret){<br>                    delHugeSet(key, cb);<br>                });<br>            });<br>        }else{<br>             //数据量不大，直接del<br>            redis.del(key, function(err, ret){<br>                cb();<br>            });<br>        }<br>    });<br>};<br>```</p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/redis/" rel="tag">#redis</a>
+          
+            <a href="/tags/best-practice/" rel="tag">#best practice</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/30/wordpress-xmlrpc攻击导致502-Bad-Gateway/" rel="next" title="wordpress xmlrpc攻击导致502 Bad Gateway">
+                <i class="fa fa-chevron-left"></i> wordpress xmlrpc攻击导致502 Bad Gateway
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/05/03/Redis最佳实践/"
+     data-title="Redis最佳实践"
+     data-content=""
+     data-url="http://kikoroc.com/2016/05/03/Redis最佳实践/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/03/Redis最佳实践/"
+           data-title="Redis最佳实践" data-url="http://kikoroc.com/2016/05/03/Redis最佳实践/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://kikoroc.qiniudn.com/double.jpg"
+               alt="王鹏" />
+          <p class="site-author-name" itemprop="name">王鹏</p>
+          <p class="site-description motion-element" itemprop="description">生命不息折腾不止</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/kikoroc/" target="_blank" title="github">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/kikoroc/" target="_blank" title="weibo">
+                  
+                    <i class="fa fa-weibo"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#找出引起redis慢的原因"><span class="nav-number">1.</span> <span class="nav-text">找出引起redis慢的原因</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#slowlog-get"><span class="nav-number">1.1.</span> <span class="nav-text">slowlog get</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#info-commandstats"><span class="nav-number">1.2.</span> <span class="nav-text">info commandstats</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#client-list"><span class="nav-number">1.3.</span> <span class="nav-text">client list</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王鹏</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"kikoroc"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
