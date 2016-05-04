@@ -1,3 +1,4 @@
+---
 title: 新浪微博WB2.login授权登录获取帐号信息以及Access_token的解决办法
 date: 2014-09-20 16:53:23
 tags: [javascript, weibo]
@@ -33,7 +34,7 @@ tags: [javascript, weibo]
 			}
 		});
 	};
-	
+
 	/**
 	 * 退出新浪微博
 	 */
@@ -46,7 +47,7 @@ tags: [javascript, weibo]
 			}
 		});
 	};
-	
+
 	/**
 	 * 获取微博用户数据
 	 */
@@ -130,4 +131,3 @@ var getAccessToken = function(){
 ```
 
 搞定收工！
-

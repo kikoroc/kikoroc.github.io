@@ -1,3 +1,4 @@
+---
 title: Spring MVC静态资源处理
 date: 2014-09-20 18:00:21
 tags: [spring]
@@ -16,7 +17,7 @@ tags: [spring]
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    
+
     <servlet-mapping>
         <servlet-name>springmvc</servlet-name>
         <url-pattern>/</url-pattern>

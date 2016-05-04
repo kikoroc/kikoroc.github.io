@@ -4,7 +4,7 @@
 
 # Site
 title: kikoroc
-subtitle: 
+subtitle:
 description: 生命不息折腾不止
 author: 王鹏
 avatar: http://kikoroc.qiniudn.com/double.jpg
@@ -16,7 +16,7 @@ timezone: Asia/Hong_Kong
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 url: http://kikoroc.com/
 root: /
-permalink: :year/:month/:day/:title/
+permalink: :year/:month/:day/:title.html
 permalink_defaults:
 
 # Directory
@@ -43,7 +43,7 @@ highlight:
   enable: true
   line_number: true
   auto_detect: true
-  tab_replace: 
+  tab_replace:
 
 # Category & Tag
 default_category: uncategorized

@@ -1,3 +1,4 @@
+---
 title: 为QC.Login.showPopup增加回调函数
 date: 2014-09-22 15:38:45
 tags: [qqsdk, javascript]
@@ -7,7 +8,7 @@ tags: [qqsdk, javascript]
 
 今天开始接入qq的帐号登录功能了，主要是web端接入，使用腾讯开发平台提供的[js-sdk](http://wiki.connect.qq.com/js_sdk%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)，在文档在发现一个很好用的api，`QC.Login.showPopup()`这个接口能直接打开qq登录的弹窗，用法也很简单：
 
-``` 
+```
 QC.Login.showPopup({
    appId:"11111111",
    redirectURI:"http://iampeng.wang/"

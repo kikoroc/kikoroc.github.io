@@ -1,10 +1,11 @@
+---
 title: Restful api安全性设计
 date: 2014-11-11 11:11:11
 tags: [restful, 安全, oauth2.0]
 ---
 
 说到restful api的安全性，大家可能很快就想到OAuth2.0，的确，OAuth2.0是目前最主流和最安全的授权机制设计。但使用它的成本对于中小型应用来说还是比较高的。那么在不使用OAuth2.0的情况下如何设计restful api的安全性呢？
-    
+
 业内还真有不使用OAuth2.0来做api鉴权的大公司——大名鼎鼎的`Amazon web service`。且看amazon是如何来做的，查阅amazon相关的文档我们大概知道其中设计的原理：为client生成public key和private key对，其中public key当然任何人都可以知道，或者可以叫做appid，用于server来区分是哪个client的；private key（或者可以叫做app secret）则只能是server和client知道，不可泄漏给第三方的任何人；client在做request的时候，将request的参数和取值整合成一个string，然后对这个string使用private key计算签名值（HMAC-SHA1或者SHA256之类），然后将这个签名值连同请求参数一起发送给server，server收到request之后按照同样的逻辑整合string，用同样的算法计算签名值，最后比较server生成的签名和client生成的签名是否相同，相同则client可信，继续执行业务逻辑，不相同则拒绝访问。
 
 amazon的第一版方案是这么做的：
