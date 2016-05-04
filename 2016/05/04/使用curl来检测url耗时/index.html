@@ -64,7 +64,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="linux," />
 
 
 
@@ -80,15 +80,16 @@
 
 
 
-<meta name="description" content="生命不息折腾不止">
-<meta property="og:type" content="website">
-<meta property="og:title" content="kikoroc">
-<meta property="og:url" content="http://kikoroc.com/archives/2014/11/index.html">
+<meta name="description" content="有时候遇到网站或者api访问速度慢，排除了服务器以及程序性能问题后，很可能是网络导致的慢速。我们可以通过linux中的curl命令来测试url的各项耗时。1curl -o /dev/null -s -w %&amp;#123;time_connect&amp;#125;:%&amp;#123;time_starttransfer&amp;#125;:%&amp;#123;time_total&amp;#125;:%&amp;#123;time_name">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用curl来检测url耗时">
+<meta property="og:url" content="http://kikoroc.com/2016/05/04/使用curl来检测url耗时/index.html">
 <meta property="og:site_name" content="kikoroc">
-<meta property="og:description" content="生命不息折腾不止">
+<meta property="og:description" content="有时候遇到网站或者api访问速度慢，排除了服务器以及程序性能问题后，很可能是网络导致的慢速。我们可以通过linux中的curl命令来测试url的各项耗时。1curl -o /dev/null -s -w %&amp;#123;time_connect&amp;#125;:%&amp;#123;time_starttransfer&amp;#125;:%&amp;#123;time_total&amp;#125;:%&amp;#123;time_name">
+<meta property="og:updated_time" content="2016-05-04T03:23:11.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="kikoroc">
-<meta name="twitter:description" content="生命不息折腾不止">
+<meta name="twitter:title" content="使用curl来检测url耗时">
+<meta name="twitter:description" content="有时候遇到网站或者api访问速度慢，排除了服务器以及程序性能问题后，很可能是网络导致的慢速。我们可以通过linux中的curl命令来测试url的各项耗时。1curl -o /dev/null -s -w %&amp;#123;time_connect&amp;#125;:%&amp;#123;time_starttransfer&amp;#125;:%&amp;#123;time_total&amp;#125;:%&amp;#123;time_name">
 
 
 
@@ -106,7 +107,7 @@
   };
 </script>
 
-  <title> 归档 | kikoroc </title>
+  <title> 使用curl来检测url耗时 | kikoroc </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -137,7 +138,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  page-archive  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -225,140 +226,152 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
-
-    <span class="archive-page-counter">
-      
-      
-      
-        
-      
-      嗯..! 目前共计 11 篇日志。 继续努力。
-    </span>
-
+  <div id="posts" class="posts-expand">
     
-
-      
-      
-      
-
-      
-        
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2014">2014</h2>
-        </div>
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2014/11/19/第三方帐号OAuth授权登录安全问题/" itemprop="url">
-              
-                <span itemprop="name">第三方帐号OAuth授权登录安全问题</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2014-11-19T20:21:21+08:00"
-              content="2014-11-19" >
-          11-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2014/11/11/Restful api安全性设计/" itemprop="url">
-              
-                <span itemprop="name">Restful api安全性设计</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2014-11-11T11:11:11+08:00"
-              content="2014-11-11" >
-          11-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2014/11/10/使用HTML5 File API和Canvas实现图片压缩、旋转、上传/" itemprop="url">
-              
-                <span itemprop="name">使用HTML5 File API和Canvas实现图片压缩、旋转、上传</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2014-11-10T19:23:32+08:00"
-              content="2014-11-10" >
-          11-10
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-  </section>
 
   
+  
 
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                使用curl来检测url耗时
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-04T11:20:54+08:00" content="2016-05-04">
+              2016-05-04
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/04/使用curl来检测url耗时/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/04/使用curl来检测url耗时/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>有时候遇到网站或者api访问速度慢，排除了服务器以及程序性能问题后，很可能是网络导致的慢速。我们可以通过linux中的curl命令来测试url的各项耗时。<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">curl</span> <span class="selector-tag">-o</span> /<span class="selector-tag">dev</span>/<span class="selector-tag">null</span> <span class="selector-tag">-s</span> <span class="selector-tag">-w</span> %&#123;<span class="selector-tag">time_connect</span>&#125;:%&#123;<span class="selector-tag">time_starttransfer</span>&#125;:%&#123;<span class="selector-tag">time_total</span>&#125;:%&#123;<span class="selector-tag">time_namelookup</span>&#125;:%&#123;speed_download&#125; <span class="attribute">http</span>:<span class="comment">//url.com/api</span></span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p><strong>time_connect</strong>:建立到服务器的TCP连接所用的时间<br><strong>time_starttransfer</strong>:在发出请求后，web服务器返回数据的第一个字节所用的时间<br><strong>time_total</strong>:完成请求所用的时间<br><strong>time_namelookup</strong>:DNS解析时间，从请求开始到DNS解析完毕所用时间（记得关掉Linux的nscd的服务测试）<br><strong>speed_download</strong>:下载速度，单位字节每秒</p>
+</blockquote>
+<p>另外可以配合</p>
+<pre><code>time wget http://url.com/api
+</code></pre><p>进一步测试。</p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/03/Native-Library-already-loaded-in-another-classloader/" rel="next" title="Native Library already loaded in another classloader">
+                <i class="fa fa-chevron-left"></i> Native Library already loaded in another classloader
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/05/04/使用curl来检测url耗时/"
+     data-title="使用curl来检测url耗时"
+     data-content=""
+     data-url="http://kikoroc.com/2016/05/04/使用curl来检测url耗时/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
 
 
           </div>
@@ -366,6 +379,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/04/使用curl来检测url耗时/"
+           data-title="使用curl来检测url耗时" data-url="http://kikoroc.com/2016/05/04/使用curl来检测url耗时/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -385,8 +406,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="http://kikoroc.qiniudn.com/double.jpg"
@@ -449,6 +479,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -545,11 +586,9 @@
   
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
 
 
   

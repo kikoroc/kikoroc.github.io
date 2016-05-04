@@ -83,7 +83,7 @@
 <meta name="description" content="生命不息折腾不止">
 <meta property="og:type" content="website">
 <meta property="og:title" content="kikoroc">
-<meta property="og:url" content="http://kikoroc.com/archives/2014/11/index.html">
+<meta property="og:url" content="http://kikoroc.com/page/2/index.html">
 <meta property="og:site_name" content="kikoroc">
 <meta property="og:description" content="生命不息折腾不止">
 <meta name="twitter:card" content="summary">
@@ -106,7 +106,7 @@
   };
 </script>
 
-  <title> 归档 | kikoroc </title>
+  <title> kikoroc </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -137,7 +137,9 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  page-archive  ">
+  <div class="container one-collumn sidebar-position-left 
+   page-home 
+ ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -224,140 +226,118 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
+  <section id="posts" class="posts-expand">
+    
+      
 
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
+  
+  
 
-    <span class="archive-page-counter">
-      
-      
-      
-        
-      
-      嗯..! 目前共计 11 篇日志。 继续努力。
-    </span>
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
 
     
+      <header class="post-header">
 
-      
-      
-      
-
-      
         
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2014">2014</h2>
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2014/09/20/新浪微博WB2.login授权登录获取帐号信息以及Access_token的解决办法/" itemprop="url">
+                  新浪微博WB2.login授权登录获取帐号信息以及Access_token的解决办法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-09-20T16:53:23+08:00" content="2014-09-20">
+              2014-09-20
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/09/20/新浪微博WB2.login授权登录获取帐号信息以及Access_token的解决办法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/09/20/新浪微博WB2.login授权登录获取帐号信息以及Access_token的解决办法/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
         </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
       
 
       
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
         
-            <a class="post-title-link" href="/2014/11/19/第三方帐号OAuth授权登录安全问题/" itemprop="url">
-              
-                <span itemprop="name">第三方帐号OAuth授权登录安全问题</span>
-              
+          <h3 id="问题1-获取帐号信息"><a href="#问题1-获取帐号信息" class="headerlink" title="问题1.获取帐号信息"></a>问题1.获取帐号信息</h3><p>最近项目中要使用到新浪微博登录，客户端的已经搞定，在网页端也需要使用微博登录功能，查了下<a href="http://open.weibo.com/">微博的文档</a>，说实话写的不太好，很多地方没有清楚而且页内的链接跳转也略混乱，不过api的设计倒是不错的。在使用过程中发现，WB2.login是没有返回值的，这时候想要拿到登录用户的信息仅通过WB2.login接口是没办法做到的。</p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>继续查阅weibo-js的文档，发现了<code>/account/get_uid.json</code>（OAuth授权之后获取用户UID）和<code>/users/show.json</code>（获取用户信息）这个两个api，所以大概的思路就有了：先请求<code>/account/get_uid.json</code>获取授权用户的uid，再在请求uid的回调中调用<code>/users/show.json</code>获取用户数据。虽然这个做法比较绕，但暂时也没发现其他更好的办法，大家可以互相交流：）</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/09/20/新浪微博WB2.login授权登录获取帐号信息以及Access_token的解决办法/#more" rel="contents">
+              阅读全文 &raquo;
             </a>
+          </div>
         
-      </h1>
+      
+    </div>
+    
+    <div>
+      
+    </div>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2014-11-19T20:21:21+08:00"
-              content="2014-11-19" >
-          11-19
-        </time>
-      </div>
+    <div>
+      
+    </div>
 
-    </header>
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </article>
 
 
-
     
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2014/11/11/Restful api安全性设计/" itemprop="url">
-              
-                <span itemprop="name">Restful api安全性设计</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2014-11-11T11:11:11+08:00"
-              content="2014-11-11" >
-          11-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2014/11/10/使用HTML5 File API和Canvas实现图片压缩、旋转、上传/" itemprop="url">
-              
-                <span itemprop="name">使用HTML5 File API和Canvas实现图片压缩、旋转、上传</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2014-11-10T19:23:32+08:00"
-              content="2014-11-10" >
-          11-10
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
   </section>
 
   
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
 
 
 
@@ -545,12 +525,6 @@
   
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
-
 
   
 
