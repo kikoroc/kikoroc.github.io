@@ -49,11 +49,11 @@
         <title>Restful api安全性设计</title>
         <pubTime>2014-11-11T03:11:11.000Z</pubTime>
         
-        <tag>restful</tag>
+        <tag>oauth2.0</tag>
          
         <tag>安全</tag>
          
-        <tag>oauth2.0</tag>
+        <tag>restful</tag>
          
          
            
@@ -70,9 +70,9 @@
         <title>第三方帐号OAuth授权登录安全问题</title>
         <pubTime>2014-11-19T12:21:21.000Z</pubTime>
         
-        <tag>安全</tag>
-         
         <tag>oauth2.0</tag>
+         
+        <tag>安全</tag>
          
          
            
