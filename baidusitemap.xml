@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+
+    
+  <url>
+    <loc>http://kikoroc.com/2014/09/20/wb2-login-get-account-info-and-access-token.html</loc>
+    <lastmod>2016-05-04T09:21:42.000Z</lastmod>
+    <data>
+        <display>
+        <title>新浪微博WB2.login授权登录获取帐号信息以及Access_token的解决办法</title>
+        <pubTime>2014-09-20T08:53:23.000Z</pubTime>
+        
+        <tag>javascript</tag>
+         
+        <tag>weibo</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://kikoroc.com/2014/11/11/restful-api-security-design.html</loc>
+    <lastmod>2016-05-04T09:21:37.000Z</lastmod>
+    <data>
+        <display>
+        <title>Restful api安全性设计</title>
+        <pubTime>2014-11-11T03:11:11.000Z</pubTime>
+        
+        <tag>oauth2.0</tag>
+         
+        <tag>安全</tag>
+         
+        <tag>restful</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://kikoroc.com/2014/11/19/oauth-login-security.html</loc>
+    <lastmod>2016-05-04T09:21:29.000Z</lastmod>
+    <data>
+        <display>
+        <title>第三方帐号OAuth授权登录安全问题</title>
+        <pubTime>2014-11-19T12:21:21.000Z</pubTime>
+        
+        <tag>oauth2.0</tag>
+         
+        <tag>安全</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://kikoroc.com/2014/09/24/manual-mode-setting-of-camera.html</loc>
+    <lastmod>2016-05-04T09:21:10.000Z</lastmod>
+    <data>
+        <display>
+        <title>单反入门——手动模式参数设置</title>
+        <pubTime>2014-09-24T02:23:31.000Z</pubTime>
+        
+        <tag>摄影</tag>
+         
+        <tag>生活</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://kikoroc.com/2014/11/10/image-ratation-compression-upload-via-html5.html</loc>
+    <lastmod>2016-05-04T09:20:57.000Z</lastmod>
+    <data>
+        <display>
+        <title>使用HTML5 File API和Canvas实现图片压缩、旋转、上传</title>
+        <pubTime>2014-11-10T11:23:32.000Z</pubTime>
+        
+        <tag>javascript</tag>
+         
+        <tag>html5</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://kikoroc.com/2014/09/20/handle-resources-with-springmvc.html</loc>
+    <lastmod>2016-05-04T09:20:52.000Z</lastmod>
+    <data>
+        <display>
+        <title>Spring MVC静态资源处理</title>
+        <pubTime>2014-09-20T10:00:21.000Z</pubTime>
+        
+        <tag>spring</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://kikoroc.com/2014/09/22/add-callback-for-qclogin-showPopup.html</loc>
+    <lastmod>2016-05-04T09:20:35.000Z</lastmod>
+    <data>
+        <display>
+        <title>为QC.Login.showPopup增加回调函数</title>
+        <pubTime>2014-09-22T07:38:45.000Z</pubTime>
+        
+        <tag>javascript</tag>
+         
+        <tag>qqsdk</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+    
+  <url>
+    <loc>http://kikoroc.com/2016/05/04/check-url-costtime-via-curl.html</loc>
+    <lastmod>2016-05-04T03:23:11.000Z</lastmod>
+    <data>
+        <display>
+        <title>使用curl来检测url耗时</title>
+        <pubTime>2016-05-04T03:20:54.000Z</pubTime>
+        
+        <tag>linux</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://kikoroc.com/2016/05/03/Native-Library-already-loaded-in-another-classloader.html</loc>
+    <lastmod>2016-05-03T07:21:24.000Z</lastmod>
+    <data>
+        <display>
+        <title>Native Library already loaded in another classloader</title>
+        <pubTime>2016-05-03T07:16:38.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://kikoroc.com/2016/05/03/redis-best-practice.html</loc>
+    <lastmod>2016-05-03T04:35:28.000Z</lastmod>
+    <data>
+        <display>
+        <title>Redis最佳实践</title>
+        <pubTime>2016-05-03T02:16:55.000Z</pubTime>
+        
+        <tag>redis</tag>
+         
+        <tag>best practice</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://kikoroc.com/2016/04/30/wordpress-xmlrpc-502-bad-gateway.html</loc>
+    <lastmod>2016-04-30T14:00:22.000Z</lastmod>
+    <data>
+        <display>
+        <title>wordpress xmlrpc攻击导致502 Bad Gateway</title>
+        <pubTime>2016-04-30T13:39:26.000Z</pubTime>
+        
+        <tag>安全</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+    
+</urlset>
