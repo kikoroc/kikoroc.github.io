@@ -4,6 +4,25 @@
 
     
   <url>
+    <loc>http://kikoroc.com/2016/05/04/resolve-hexo-DTraceProviderBindings-MODULE-NOT-FOUND.html</loc>
+    <lastmod>2016-05-04T14:39:31.000Z</lastmod>
+    <data>
+        <display>
+        <title>解决hexo神烦的DTraceProviderBindings MODULE_NOT_FOUND</title>
+        <pubTime>2016-05-04T14:28:37.000Z</pubTime>
+        
+        <tag>hexo</tag>
+         
+        <tag>nodejs</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://kikoroc.com/2014/09/20/wb2-login-get-account-info-and-access-token.html</loc>
     <lastmod>2016-05-04T09:21:42.000Z</lastmod>
     <data>
@@ -125,9 +144,9 @@
         <title>为QC.Login.showPopup增加回调函数</title>
         <pubTime>2014-09-22T07:38:45.000Z</pubTime>
         
-        <tag>javascript</tag>
-         
         <tag>qqsdk</tag>
+         
+        <tag>javascript</tag>
          
          
            
