@@ -18,6 +18,8 @@
 
 
 
+  <meta name="google-site-verification" content="AHRF6FnSA1Skfdl3bWRVi2l88_MDvUHwzgUeuUfQqyo" />
+
 
 
   <meta name="msvalidate.01" content="B5194860190783A4C749EE5976B5F97F" />
@@ -260,6 +262,113 @@
             
               
                 
+                <a class="post-title-link" href="/2014/09/22/add-callback-for-qclogin-showPopup.html" itemprop="url">
+                  为QC.Login.showPopup增加回调函数
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-09-22T15:38:45+08:00" content="2014-09-22">
+              2014-09-22
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/09/22/add-callback-for-qclogin-showPopup.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/09/22/add-callback-for-qclogin-showPopup.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>今天开始接入qq的帐号登录功能了，主要是web端接入，使用腾讯开发平台提供的<a href="http://wiki.connect.qq.com/js_sdk%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E">js-sdk</a>，在文档在发现一个很好用的api，<code>QC.Login.showPopup()</code>这个接口能直接打开qq登录的弹窗，用法也很简单：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">QC</span><span class="selector-class">.Login</span><span class="selector-class">.showPopup</span>(&#123;</span><br><span class="line">   <span class="attribute">appId</span>:<span class="string">"11111111"</span>,</span><br><span class="line">   redirectURI:<span class="string">"http://iampeng.wang/"</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>实际使用中，发现需要一个登录成功后的回调函数，但是<code>QC.Login.showPopuo()</code>接口并没有提供任何回调函数。</p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>在剩下的文档中，发现<code>QC.Login()</code>这个接口是提供回调函数的，用法如下：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">QC</span><span class="selector-class">.Login</span>(&#123;</span><br><span class="line">    <span class="attribute">btnId</span>:<span class="string">"loginBtn"</span></span><br><span class="line">&#125;,<span class="selector-tag">loginCallback</span>,<span class="selector-tag">logoutCallback</span>);</span><br></pre></td></tr></table></figure>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/09/22/add-callback-for-qclogin-showPopup.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/09/20/handle-resources-with-springmvc.html" itemprop="url">
                   Spring MVC静态资源处理
                 </a>
@@ -322,7 +431,7 @@
         
       
     </div>
-    
+
     <div>
       
     </div>
@@ -426,7 +535,7 @@
         
       
     </div>
-    
+
     <div>
       
     </div>
@@ -494,7 +603,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-count">13</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

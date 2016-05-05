@@ -4,6 +4,25 @@
 
     
   <url>
+    <loc>http://kikoroc.com/2016/05/05/hexo-customize-and-optimization.html</loc>
+    <lastmod>2016-05-05T13:01:39.000Z</lastmod>
+    <data>
+        <display>
+        <title>hexo定制&优化</title>
+        <pubTime>2016-05-05T07:36:13.000Z</pubTime>
+        
+        <tag>hexo</tag>
+         
+        <tag>nodejs</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://kikoroc.com/2016/05/04/resolve-hexo-DTraceProviderBindings-MODULE-NOT-FOUND.html</loc>
     <lastmod>2016-05-04T14:50:33.000Z</lastmod>
     <data>

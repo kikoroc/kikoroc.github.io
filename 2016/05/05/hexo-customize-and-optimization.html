@@ -1,0 +1,695 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="AHRF6FnSA1Skfdl3bWRVi2l88_MDvUHwzgUeuUfQqyo" />
+
+
+
+  <meta name="msvalidate.01" content="B5194860190783A4C749EE5976B5F97F" />
+
+
+
+<meta name="sogou_site_verification" content="kCeD6iIyca"/>
+
+
+
+  <meta name="baidu-site-verification" content="fG9XIkTI0Y" />
+
+
+
+
+  <meta name="360-site-verification" content="e7723e0b265664f01d5b979e8c588b38" />
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.useso.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="hexo,nodejs," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前言折腾hexo有几天时间了，配合NexT主题，大爱！虽然我写博客主要是用来记录自己的一些知识积累，并不强求有多少人来看，hexo本身已经很优秀了，但有些地方对于强迫症来说还是忍不住想要定制和优化，这样才能让自己更爽~~而且折腾的过程中，也可以学到不少新的知识。
+静态资源优化主要是压缩html,css,js等等静态资源，可以适当减少请求的数据量，主要用到gulp和一些相关的插件来实现，直接列出我的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hexo定制&优化">
+<meta property="og:url" content="http://kikoroc.com/2016/05/05/hexo-customize-and-optimization.html">
+<meta property="og:site_name" content="kikoroc">
+<meta property="og:description" content="前言折腾hexo有几天时间了，配合NexT主题，大爱！虽然我写博客主要是用来记录自己的一些知识积累，并不强求有多少人来看，hexo本身已经很优秀了，但有些地方对于强迫症来说还是忍不住想要定制和优化，这样才能让自己更爽~~而且折腾的过程中，也可以学到不少新的知识。
+静态资源优化主要是压缩html,css,js等等静态资源，可以适当减少请求的数据量，主要用到gulp和一些相关的插件来实现，直接列出我的">
+<meta property="og:updated_time" content="2016-05-05T13:01:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hexo定制&优化">
+<meta name="twitter:description" content="前言折腾hexo有几天时间了，配合NexT主题，大爱！虽然我写博客主要是用来记录自己的一些知识积累，并不强求有多少人来看，hexo本身已经很优秀了，但有些地方对于强迫症来说还是忍不住想要定制和优化，这样才能让自己更爽~~而且折腾的过程中，也可以学到不少新的知识。
+静态资源优化主要是压缩html,css,js等等静态资源，可以适当减少请求的数据量，主要用到gulp和一些相关的插件来实现，直接列出我的">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6224350115549677000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> hexo定制&优化 | kikoroc </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?0dc5cea21c95c5e7b651894720cf278c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">kikoroc</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                hexo定制&优化
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-05T15:36:13+08:00" content="2016-05-05">
+              2016-05-05
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/05/hexo-customize-and-optimization.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/05/hexo-customize-and-optimization.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa"></i> 阅读
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>折腾hexo有几天时间了，配合<a href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="external">NexT</a>主题，大爱！虽然我写博客主要是用来记录自己的一些知识积累，并不强求有多少人来看，hexo本身已经很优秀了，但有些地方对于强迫症来说还是忍不住想要定制和优化，这样才能让自己更爽~~而且折腾的过程中，也可以学到不少新的知识。</p>
+<h2 id="静态资源优化"><a href="#静态资源优化" class="headerlink" title="静态资源优化"></a>静态资源优化</h2><p>主要是压缩html,css,js等等静态资源，可以适当减少请求的数据量，主要用到<code>gulp</code>和一些相关的插件来实现，直接列出我的dependencies.<br><figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"dependencies"</span>: &#123;</span><br><span class="line">  <span class="string">"gulp"</span>: <span class="string">"^3.9.1"</span>,</span><br><span class="line">  <span class="string">"gulp-htmlclean"</span>: <span class="string">"^2.7.6"</span>,</span><br><span class="line">  <span class="string">"gulp-htmlmin"</span>: <span class="string">"^1.3.0"</span>,</span><br><span class="line">  <span class="string">"gulp-imagemin"</span>: <span class="string">"^2.4.0"</span>,</span><br><span class="line">  <span class="string">"gulp-minify-css"</span>: <span class="string">"^1.2.4"</span>,</span><br><span class="line">  <span class="string">"gulp-uglify"</span>: <span class="string">"^1.5.3"</span>,</span><br><span class="line">  <span class="string">"hexo"</span>: <span class="string">"^3.2.0"</span>,</span><br><span class="line">  <span class="string">"hexo-deployer-git"</span>: <span class="string">"^0.1.0"</span>,</span><br><span class="line">  <span class="string">"hexo-generator-archive"</span>: <span class="string">"^0.1.4"</span>,</span><br><span class="line">  <span class="string">"hexo-generator-category"</span>: <span class="string">"^0.1.3"</span>,</span><br><span class="line">  <span class="string">"hexo-generator-index"</span>: <span class="string">"^0.2.0"</span>,</span><br><span class="line">  <span class="string">"hexo-generator-tag"</span>: <span class="string">"^0.2.0"</span>,</span><br><span class="line">  <span class="string">"hexo-generator-sitemap"</span>: <span class="string">"^1.1.2"</span>,</span><br><span class="line">  <span class="string">"hexo-generator-baidu-sitemap"</span>: <span class="string">"^0.1.2"</span>,</span><br><span class="line">  <span class="string">"hexo-renderer-ejs"</span>: <span class="string">"^0.2.0"</span>,</span><br><span class="line">  <span class="string">"hexo-renderer-marked"</span>: <span class="string">"^0.2.10"</span>,</span><br><span class="line">  <span class="string">"hexo-renderer-stylus"</span>: <span class="string">"^0.3.1"</span>,</span><br><span class="line">  <span class="string">"hexo-server"</span>: <span class="string">"^0.2.0"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其中<code>gulp</code>相关的就是用来压缩静态资源用的，接着还要安装<code>gulp</code>工具：<br><a id="more"></a><br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm <span class="keyword">install</span> gulp -g</span><br></pre></td></tr></table></figure></p>
+<p>然后添加<code>gulpfile.js</code>到根目录。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">'gulp'</span>);</span><br><span class="line"><span class="keyword">var</span> minifycss = <span class="built_in">require</span>(<span class="string">'gulp-minify-css'</span>);</span><br><span class="line"><span class="keyword">var</span> uglify = <span class="built_in">require</span>(<span class="string">'gulp-uglify'</span>);</span><br><span class="line"><span class="keyword">var</span> htmlmin = <span class="built_in">require</span>(<span class="string">'gulp-htmlmin'</span>);</span><br><span class="line"><span class="keyword">var</span> htmlclean = <span class="built_in">require</span>(<span class="string">'gulp-htmlclean'</span>);</span><br><span class="line"><span class="comment">// 压缩css文件</span></span><br><span class="line">gulp.task(<span class="string">'minify-css'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> gulp.src(<span class="string">'./public/**/*.css'</span>)</span><br><span class="line">  .pipe(minifycss())</span><br><span class="line">  .pipe(gulp.dest(<span class="string">'./public'</span>));</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 压缩html文件</span></span><br><span class="line">gulp.task(<span class="string">'minify-html'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> gulp.src(<span class="string">'./public/**/*.html'</span>)</span><br><span class="line">  .pipe(htmlclean())</span><br><span class="line">  .pipe(htmlmin(&#123;</span><br><span class="line">    removeComments: <span class="literal">true</span>,</span><br><span class="line">    minifyJS: <span class="literal">true</span>,</span><br><span class="line">    minifyCSS: <span class="literal">true</span>,</span><br><span class="line">    minifyURLs: <span class="literal">true</span>,</span><br><span class="line">  &#125;))</span><br><span class="line">  .pipe(gulp.dest(<span class="string">'./public'</span>))</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 压缩js文件</span></span><br><span class="line">gulp.task(<span class="string">'minify-js'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> gulp.src(<span class="string">'./public/**/*.js'</span>)</span><br><span class="line">  .pipe(uglify())</span><br><span class="line">  .pipe(gulp.dest(<span class="string">'./public'</span>));</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 默认任务</span></span><br><span class="line">gulp.task(<span class="string">'default'</span>, [</span><br><span class="line">  <span class="string">'minify-html'</span>,<span class="string">'minify-css'</span>,<span class="string">'minify-js'</span></span><br><span class="line">]);</span><br></pre></td></tr></table></figure></p>
+<p>以后generate的时候跟上gulp命令即可压缩静态资源。<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>hexo g</span><br><span class="line"><span class="variable">$ </span>gulp</span><br><span class="line"><span class="variable">$ </span>hexo d</span><br></pre></td></tr></table></figure></p>
+<h2 id="生成sitemap文件"><a href="#生成sitemap文件" class="headerlink" title="生成sitemap文件"></a>生成sitemap文件</h2><p>生成sitemap文件然后提交给搜索引擎，对于SEO很有帮助，hexo有相关的sitemap插件。<br><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"hexo-generator-sitemap"</span>: <span class="string">"^1.1.2"</span>,</span><br><span class="line"><span class="string">"hexo-generator-baidu-sitemap"</span>: <span class="string">"^0.1.2"</span>,</span><br></pre></td></tr></table></figure></p>
+<p>安装这俩插件后，以后每次<code>hexo g</code>都会生成sitemap.xml和baidusitemap.xml文件并自动帮你放到public目录。很省心~</p>
+<h2 id="修改permalink"><a href="#修改permalink" class="headerlink" title="修改permalink"></a>修改permalink</h2><p>hexo默认的permalink配置是：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">permalink:</span> <span class="symbol">:year/</span><span class="symbol">:month/</span><span class="symbol">:day/</span><span class="symbol">:title/</span></span><br></pre></td></tr></table></figure></p>
+<p>这样生成的访问链接都是类似<code>http://yoursite.com/2016/05/06/your_title/</code>这样的，有点动态网站的风格，不过这样可能对于搜索引擎不是太友好，我们可以把permalink修改成.html结尾的：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">permalink:</span> <span class="symbol">:year/</span><span class="symbol">:month/</span><span class="symbol">:day/</span><span class="symbol">:title</span>.html</span><br></pre></td></tr></table></figure></p>
+<p>还有一点需要注意的是，title最好是英文的，这样permalink也是不带中文的，但是markdown文件中的title你还是可以按自己的文章标题写成中文的。</p>
+<h2 id="其他小的修改点"><a href="#其他小的修改点" class="headerlink" title="其他小的修改点"></a>其他小的修改点</h2><p>这些都是看个人爱好了，hexo还是很方便自己自定义的。</p>
+<ol>
+<li><p>站点头像改成圆形<br>在<code>themes/next/source/css/_common/components/sidebar/sidebar-author.styl</code>中<code>.site-author-image</code>定义中增加：</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">border</span>-<span class="built_in">radius</span>: <span class="number">50</span><span class="symbol">%</span>;</span><br><span class="line">-webkit-<span class="built_in">border</span>-<span class="built_in">radius</span>: <span class="number">50</span><span class="symbol">%</span>;</span><br><span class="line">-moz-<span class="built_in">border</span>-<span class="built_in">radius</span>: <span class="number">50</span><span class="symbol">%</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>去掉站点链接前面的小圆点<br>个人不太喜欢站点链接前面的小圆点，去掉<code>themes/next/source/css/_common/components/sidebar/sidebar-author-links.styl</code>中<code>a::before</code>的定义即可。</p>
+</li>
+<li><p>小技巧<br>有其他想修改的小地方，都可以打开浏览器的开发者工具，找到对应地方的css定义，然后在sublime或者atom中<code>Search In Directory</code>找到对应css的源码，修改即可。</p>
+</li>
+</ol>
+<h2 id="解决github-pages屏蔽百度爬虫的问题"><a href="#解决github-pages屏蔽百度爬虫的问题" class="headerlink" title="解决github pages屏蔽百度爬虫的问题"></a>解决github pages屏蔽百度爬虫的问题</h2><p>嗯，是的，github pages屏蔽了百度爬虫。这样你的hexo博客很难被百度收录，本来也无所谓，但是从技术的角度来看，解决这种问题肯定很有快感~~<br>目前主要有两种解决方案：<code>CDN回源</code>和``</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/hexo/" rel="tag">#hexo</a>
+          
+            <a href="/tags/nodejs/" rel="tag">#nodejs</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/04/resolve-hexo-DTraceProviderBindings-MODULE-NOT-FOUND.html" rel="next" title="解决hexo神烦的DTraceProviderBindings MODULE_NOT_FOUND">
+                <i class="fa fa-chevron-left"></i> 解决hexo神烦的DTraceProviderBindings MODULE_NOT_FOUND
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/05/05/hexo-customize-and-optimization.html"
+     data-title="hexo定制&优化"
+     data-content=""
+     data-url="http://kikoroc.com/2016/05/05/hexo-customize-and-optimization.html">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/05/hexo-customize-and-optimization.html"
+           data-title="hexo定制&优化" data-url="http://kikoroc.com/2016/05/05/hexo-customize-and-optimization.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://kikoroc.qiniudn.com/double.jpg"
+               alt="王鹏" />
+          <p class="site-author-name" itemprop="name">王鹏</p>
+          <p class="site-description motion-element" itemprop="description">生命不息折腾不止</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/kikoroc/" target="_blank" title="github">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/kikoroc/" target="_blank" title="weibo">
+                  
+                    <i class="fa fa-weibo"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#静态资源优化"><span class="nav-number">2.</span> <span class="nav-text">静态资源优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成sitemap文件"><span class="nav-number">3.</span> <span class="nav-text">生成sitemap文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改permalink"><span class="nav-number">4.</span> <span class="nav-text">修改permalink</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他小的修改点"><span class="nav-number">5.</span> <span class="nav-text">其他小的修改点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决github-pages屏蔽百度爬虫的问题"><span class="nav-number">6.</span> <span class="nav-text">解决github pages屏蔽百度爬虫的问题</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王鹏</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+    <span class="site-pv"><i class="fa fa-eye"></i> 本站累计访问<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次</span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"kikoroc"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

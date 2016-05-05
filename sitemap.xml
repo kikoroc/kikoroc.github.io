@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://kikoroc.com/2016/05/05/hexo-customize-and-optimization.html</loc>
+    
+    <lastmod>2016-05-05T13:01:39.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://kikoroc.com/2016/05/04/resolve-hexo-DTraceProviderBindings-MODULE-NOT-FOUND.html</loc>
     
     <lastmod>2016-05-04T14:50:33.000Z</lastmod>
