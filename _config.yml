@@ -79,5 +79,7 @@ baidu_analytics: 0dc5cea21c95c5e7b651894720cf278c
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/kikoroc/kikoroc.github.io.git
-  branch: master
+  #repo: https://github.com/kikoroc/kikoroc.github.io.git
+  #branch: master
+  repo: git@git.coding.net:/kikoroc/kikoroc
+  branch: coding-pages
