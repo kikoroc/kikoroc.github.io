@@ -2023,13 +2023,6 @@ a.search-result {
 .page-pv .busuanzi-value {
   margin: 0 5px;
 }
-.site-uv {
-  margin-right: 10px;
-}
-.site-uv::after {
-  content: "|";
-  padding-left: 10px;
-}
 .use-motion .post {
   opacity: 0;
 }
