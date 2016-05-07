@@ -271,6 +271,112 @@
             
               
                 
+                <a class="post-title-link" href="/2016/05/08/java-primitive-data-types-and-object-types.html" itemprop="url">
+                  java为什么有基本数据类型？
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-08T00:18:49+08:00" content="2016-05-08">
+              2016-05-08
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/08/java-primitive-data-types-and-object-types.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/08/java-primitive-data-types-and-object-types.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>说到java语言的数据类型，我们都知道包括<strong>基本数据类型</strong>和<strong>对象类型</strong>，而且java是一门面向对象的语言，对象类型可以理解，基本数据类型会使得java的面向对象不是那么纯粹，那么为什么java还要保留基本数据类型呢？<br>先看基本类型和对象类型的一些区别：</p>
+<h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><h3 id="基本类型是基于值，对象类型是基于引用"><a href="#基本类型是基于值，对象类型是基于引用" class="headerlink" title="基本类型是基于值，对象类型是基于引用"></a>基本类型是基于值，对象类型是基于引用</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i1 = <span class="number">100</span>;</span><br><span class="line">Integer i2 = <span class="keyword">new</span> Integer(<span class="number">100</span>);</span><br><span class="line">Integer i3 = <span class="number">100</span>;</span><br></pre></td></tr></table></figure>
+<p>第一句是使用基本类型int，第二句使用int的包装类Integer，第三句使用了jdk5自动装箱的特性（简化了包装类的使用，减少编码量，但是底层的语义没有改变，对运行时也没有任何影响）。<br>i1直接持有一个整数的值，但是i2持有的是一个Integer对象的引用！<br>说到自动装箱有一点需要注意：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Integer i1 = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">int</span> i2 = i1;</span><br></pre></td></tr></table></figure></p>
+<p>基于自动装箱的特性，上面的代码并不会有编译错误，但是运行的时候你会发现会抛出<code>NullPointerException</code>，因为i1指向的是null，在自动拆箱的时候就会出现错误。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/05/08/java-primitive-data-types-and-object-types.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/05/05/hexo-customize-and-optimization.html" itemprop="url">
                   hexo定制&优化
                 </a>
@@ -1211,119 +1317,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/09/24/manual-mode-setting-of-camera.html" itemprop="url">
-                  单反入门——手动模式参数设置
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2014-09-24T10:23:31+08:00" content="2014-09-24">
-              2014-09-24
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2014/09/24/manual-mode-setting-of-camera.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/09/24/manual-mode-setting-of-camera.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>上周末去澳门入了一台梦寐以求很久的单反相机，<strong>Canon EOS 70D</strong>，日本原装进口的，所以即使在澳门买的也没比国行便宜多少-.-</p>
-<p>单反相机的魅力就在于手动模式操作，然后拍出碉堡的相片。作为单反小白的我，这几天迫不及待的网上自学了下单反的手动模式操作，简单总结一下。</p>
-<p><code>测光模式</code>：分为评价测光、局部测光、点测光、中央重点测光。</p>
-<blockquote>
-<p>测光模式主要设定目标与环境的受光反差情况。</p>
-<p>1.<strong>评价测光：</strong>目标受光与环境反差不大，突出目标；</p>
-<p>2.<strong>局部测光：</strong>目标受光与环境反差大，突出目标；</p>
-<p>3.<strong>点测光：</strong>目标受光与环境反差大，与<strong>局部测光</strong>差不多，区别在于测光范围大小的区别，如关灯房间里面的蜡烛；</p>
-<p>4.<strong>中央重点测光：</strong>兼顾目标与环境的测光模式，中庸，比如拍旅游的合影。</p>
-</blockquote>
-<p><code>白平衡</code>：控制相机的色彩还原，相机里面一般预设了很多白平衡模式，如日光灯、自然光、钨丝灯、阳光、阴天等场景，拿捏不准的时候可以直接使用自动白平衡模式，熟悉了之后可以使用用户自定义模式（慢慢锻炼吧）。自定义模式一般是设置色温，太高端，暂不研究 -.-</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014/09/24/manual-mode-setting-of-camera.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1369,7 +1362,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-count">14</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

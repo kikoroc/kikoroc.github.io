@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://kikoroc.com/2016/05/08/java-primitive-data-types-and-object-types.html</loc>
+    
+    <lastmod>2016-05-07T17:34:00.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://kikoroc.com/404.html</loc>
     
     <lastmod>2016-05-06T08:55:06.000Z</lastmod>
@@ -107,14 +114,14 @@
   </url>
   
   <url>
-    <loc>http://kikoroc.com/tags/index.html</loc>
+    <loc>http://kikoroc.com/categories/index.html</loc>
     
     <lastmod>2016-04-30T14:00:22.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://kikoroc.com/categories/index.html</loc>
+    <loc>http://kikoroc.com/tags/index.html</loc>
     
     <lastmod>2016-04-30T14:00:22.000Z</lastmod>
     
