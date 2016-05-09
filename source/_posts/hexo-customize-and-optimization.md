@@ -1,5 +1,5 @@
 ---
-title: hexo定制&优化
+title: hexo定制and优化
 date: 2016-05-05 15:36:13
 tags: [hexo, nodejs]
 ---
