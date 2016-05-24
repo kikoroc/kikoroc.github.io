@@ -261,3 +261,6 @@ serializable.serializeToJSON(new FileWriter("car.json"));
 ```
 
 现在你会发现接口提供一种比继承更清晰的方式来实现跨类的方法。
+
+---
+译自：[http://tutorials.jenkov.com/java/interfaces.html](http://tutorials.jenkov.com/java/interfaces.html)，能力有限，详细细节可以查阅原文。
