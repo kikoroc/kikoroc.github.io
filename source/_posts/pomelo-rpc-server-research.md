@@ -29,7 +29,8 @@ module.exports.create = function(opts) {
 ```
 
 首先`loadRemoteServices()`方法根据opts参数中的paths加载远程服务。
-其中pomelo paths的格式类似(pomelo根据约定封装,详见https://github.com/NetEase/pomelo/blob/master/lib/components/remote.js)：
+其中pomelo paths的格式类似，pomelo根据约定封装,详见  
+https://github.com/NetEase/pomelo/blob/master/lib/components/remote.js
 
 ```json
 [
