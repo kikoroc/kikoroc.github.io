@@ -21,13 +21,13 @@ ok，至此你的一年免费ec2实例就申请好了。至于一年后，该付
 
 <!--more-->
 
-1.登录到ec2实例
+### 登录到ec2实例
 
 ```bash
 ssh -i "/path/to/your/pem/file" ubuntu@your.ec2.instance.at.compute.amazonaws.com
 ```
 
-2.搭建vpn服务
+### 搭建vpn服务
 
 vpn具有先天跨平台的优势，各类操作系统都有自己的vpn功能，直接可以用，无需第三方客户端。  
 
@@ -111,7 +111,7 @@ sudo /etc/init.d/pptpd restart
 last | grep still | grep ppp
 ```
 
-3.搭建shadowsocks服务
+### 搭建shadowsocks服务
 
 前面说到vpn够全能但不够灵活，那shadowsocks可谓瑞士军刀般小巧灵活了。因为shadowsocks属于HTTP/SOCK5代理，配合浏览器插件（SwitchySharp等）很方便。shadowsocks相关的资料可以参考https://github.com/shadowsocks/shadowsocks/wiki/
 
@@ -161,7 +161,7 @@ sudo tail -f /var/log/shadowsocks.log
 
 至此，shadowsocks服务就搭建ok了，去https://github.com/shadowsocks/shadowsocks/wiki/Ports-and-Clients 下载对应的shadowsocks客户端开始体验墙外的酸爽吧~手机上同样可以体验~~
 
-4.其他
+### 其他
 
 网上很多教程漏了一点，要登录到ec2控制台开启vpn和shadowsocks的端口权限。
 
