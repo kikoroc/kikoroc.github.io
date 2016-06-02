@@ -119,3 +119,5 @@ pomelo proxy可以配置lazyConnect属性，意思是addServer的时候并没有
 在MailStation中，有pendings和pendingSize属性，意思是当请求到某remote server的mailbox还在connecting或者还没有connected的时候，MailStation会帮助缓存rpc请求到pindings中，当mailbox connected之后再一起flush到mailbox中，这样可以防止server重启时丢掉rpc请求，而pendingSize则可以指定缓存请求的条数。
 
 个人觉得当remote server进程数较少的时候，这种缓存的机制还是挺不错的，当进程数较多的时候，除非重启全部serverType的进程，不然rpc请求会转发给其他connected的rpc server处理。当然这种机制的存在还是很不错的。
+
+相关文章：[pomelo-rpc原理解析之server](http://kikoroc.com/2016/05/25/pomelo-rpc-server-research.html)
