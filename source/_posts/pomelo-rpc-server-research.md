@@ -330,4 +330,4 @@ var processMsg = function(socket, acceptor, pkg, id) {
 
 在日常开发中，新手很容易遇到rpc调用超时的情况，一般来看都是因为某些remote方法没有正确回调或者根本漏写了回调。
 
-相关文章：[pomelo-rpc原理解析之client](http://kikoroc.com/2016/05/25/pomelo-rpc-client-research.html)
+相关文章：[pomelo-rpc原理解析之client](http://kikoroc.com/2016/05/31/pomelo-rpc-client-research.html)
