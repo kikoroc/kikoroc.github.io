@@ -1,5 +1,5 @@
 ---
-title: fix-windows-shell-error-on-linux
+title: 解决windows上编写的shell代码在linux的运行错误
 date: 2016-07-01 15:08:08
 tags: [linux]
 ---
