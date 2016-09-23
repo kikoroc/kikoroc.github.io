@@ -1,5 +1,5 @@
 ---
-title: [转载]分布式系统的CAP理论
+title: 【转载】分布式系统的CAP理论
 date: 2016-09-22 17:47:01
 tags: [CAP]
 ---
@@ -14,7 +14,7 @@ tags: [CAP]
 
 一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition tolerance）这三项中的两项。
 
-![CAP](http://www.hollischuang.com/wp-content/uploads/2015/12/cap.jpg)
+![CAP](https://odxth7737.qnssl.com/cap.jpg)
 
 ## CAP的定义
 
@@ -44,13 +44,13 @@ tags: [CAP]
 
 ## CAP的证明
 
-![CAP1](http://www.hollischuang.com/wp-content/uploads/2016/03/intro_thumb.png)
+![CAP1](https://odxth7737.qnssl.com/intro_thumb.png)
 
 如上图，是我们证明CAP的基本场景，网络中有两个节点N1和N2，可以简单的理解N1和N2分别是两台计算机，他们之间网络可以连通，N1中有一个应用程序A，和一个数据库V，N2也有一个应用程序B2和一个数据库V。现在，A和B是分布式系统的两个部分，V是分布式系统的数据存储的两个子数据库。
 
 在满足一致性的时候，N1和N2中的数据是一样的，V0=V0。在满足可用性的时候，用户不管是请求N1或者N2，都会得到立即响应。在满足分区容错性的情况下，N1和N2有任何一方宕机，或者网络不通的时候，都不会影响N1和N2彼此之间的正常运作。
 
-![CAP2](http://www.hollischuang.com/wp-content/uploads/2016/03/scenario1_thumb.png)
+![CAP2](https://odxth7737.qnssl.com/scenario1_thumb.png)
 
 如上图，是分布式系统正常运转的流程，用户向N1机器请求数据更新，程序A更新数据库Vo为V1，分布式系统将数据进行同步操作M，将V1同步的N2中V0，使得N2中的数据V0也更新为V1，N2中的数据再响应N2的请求。
 
@@ -58,7 +58,7 @@ tags: [CAP]
 
 作为一个分布式系统，它和单机系统的最大区别，就在于网络，现在假设一种极端情况，N1和N2之间的网络断开了，我们要支持这种网络异常，相当于要满足分区容错性，能不能同时满足一致性和响应性呢？还是说要对他们进行取舍。
 
-![CAP3](http://www.hollischuang.com/wp-content/uploads/2016/03/scenario2_thumb.png)
+![CAP3](https://odxth7737.qnssl.com/scenario2_thumb.png)
 
 假设在N1和N2之间网络断开的时候，有用户向N1发送数据更新请求，那N1中的数据V0将被更新为V1，由于网络是断开的，所以分布式系统同步操作M，所以N2中的数据依旧是V0；这个时候，有用户向N2发送数据读取请求，由于数据还没有进行同步，应用程序没办法立即给用户返回最新的数据V1，怎么办呢？有二种选择，第一，牺牲数据一致性，响应旧的数据V0给用户；第二，牺牲可用性，阻塞等待，直到网络连接恢复，数据更新操作M完成之后，再给用户响应最新的数据V1。
 
@@ -80,4 +80,4 @@ tags: [CAP]
 
 孰优孰略，没有定论，只能根据场景定夺，适合的才是最好的。
 
---------------------------EOF-------------------
+-EOF-

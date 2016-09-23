@@ -110,16 +110,16 @@ tags: [javascript, weibo]
 
 请求授权登录后在console里面发现：
 
-![Alt text](http://kikoroc.qiniudn.com/1411210569711.png)
+![Alt text](https://odxth7737.qnssl.com/1411210569711.png)
 
 我们想要的access token被log出来了，显然这是wb.js的逻辑，继续查看wb.js的源码，找到`console.log`的地方。
 
-![Alt text](http://kikoroc.qiniudn.com/1411210702079.png)
+![Alt text](https://odxth7737.qnssl.com/1411210702079.png)
 
 哈哈，被log的data数据接着被`Cookie.save(data)`了。
 继续看cookie信息，果然是有一个key为weibojs接一串数字，value则是access token等信息。而且weibojs后面那个数字正是我们申请到的app key，接下来就好做了，拿到这个cookie数据，解析出access token即可。
 
-![Alt text](http://kikoroc.qiniudn.com/1411210778626.png)
+![Alt text](https://odxth7737.qnssl.com/1411210778626.png)
 
 我这里是用到zepto.js库，zepto没有自带cookie相关api的，找到[zepto的cookie扩展](https://github.com/kennx/Zepto-Cookie)，获取access token的代码：
 

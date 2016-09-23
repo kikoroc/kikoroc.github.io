@@ -129,7 +129,7 @@ hexo博客都是静态文件，很适合使用CDN回源，这样不仅能提高�
 回源的意思是用户请求hexo之后CDN会抓取hexo内容，这样其他用户就不用访问github pages了而是直接从CDN就近的节点拉取数据，访问速度更快。但是这里有个问题，比如百度爬虫所在的区域CDN节点还没有缓存hexo数据，这样百度爬虫会穿透CDN直接请求到github pages，然后后果就是github pages返回403 forbidden。所以CDN回源的方式仅适用于博客访客量比较大的情况（这样访问会在百度爬虫之前让CDN缓存hexo数据，当然也只是比较大的概率）。
 不过如果无视百度爬虫，给hexo加上CDN回源也是很不错的，至少能提高访问速度。推荐使用[又拍云](https://www.upyun.com/index.html)。大概的配置步骤：
 #### 配置服务
-![配置upyun服务](http://kikoroc.qiniudn.com/upyun_cdn_1.png)
+![配置upyun服务](https://odxth7737.qnssl.com/upyun_cdn_1.png)
 #### 添加CNAME解析
 ```
 CNAME @ kikoroc.b0.aicdn.com
@@ -151,7 +151,7 @@ deploy:
 后面有时间可以写个脚本直接同时部署github和gitcafe。
 #### 正常用户访问github pages，百度爬虫访问gitcafe
 现在的DNS解析服务一般都可以指定特定的线路，比如指定百度爬虫的线路解析到gitcafe。
-![dnspod设置](http://kikoroc.qiniudn.com/dnspod1.png)
+![dnspod设置](https://odxth7737.qnssl.com/dnspod1.png)
 gitcafe pages绑定域名到kikoroc.com。
 
 -EOF-

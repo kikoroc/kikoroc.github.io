@@ -83,7 +83,7 @@ update tb_relation set relation=2,updateAt=? where id = ?;
 
 ## 好友关系同步
 
-![friend data sync](http://kikoroc.qiniudn.com/friend_data_sync.jpg)
+![friend data sync](https://odxth7737.qnssl.com/friend_data_sync.jpg)
 本同步方案的关键在于记录updateAt。
 
 * 全量同步fullSync

@@ -6,7 +6,7 @@ tags: [linux]
 
 翻墙作为现在程序猿们的必修课，大家十八般武艺各种翻，我也尝试了很多方法，从最开始朋友给的vpn账号，到购买简单易用的插件服务，曲径红杏什么的，接着购买各种付费ss，vpn，到现在折腾亚马逊一年免费的ec2套餐自己搭建vpn/ss服务，一来基本免费，二来可以自己动手搭建vpn/ss服务折腾一下也挺爽。
 
-![aws](http://kikoroc.qiniudn.com/aws.png)
+![aws](https://odxth7737.qnssl.com/aws.png)
 
 开通amazon aws/ec2的教程网上很多，我这里就不详细写了，大家自己google，有几点需要注意的简单提一下：
 
@@ -165,4 +165,4 @@ sudo tail -f /var/log/shadowsocks.log
 
 网上很多教程漏了一点，要登录到ec2控制台开启vpn和shadowsocks的端口权限。
 
-![端口设置](http://kikoroc.qiniudn.com/awsportsetting.png)
+![端口设置](https://odxth7737.qnssl.com/awsportsetting.png)

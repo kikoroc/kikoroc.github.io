@@ -220,7 +220,7 @@ public interface MySubInterface extends SuperInterface1, SuperInterface2 {
 
 java中接口是实现多态性的一种方式。多态的意思是一个类的实例可以被当做不同的类型（类或者接口）来使用。
 
-![Two parallel class hierarchies used in the same application.](http://kikoroc.qiniudn.com/polymorphism.png)
+![Two parallel class hierarchies used in the same application.](https://odxth7737.qnssl.com/polymorphism.png)
 
 上面的类展示了vehicles和drivers的不同类型，这些类的作用是构造现实生活中真实的实体。
 

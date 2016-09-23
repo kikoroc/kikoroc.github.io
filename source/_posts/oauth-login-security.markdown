@@ -49,16 +49,16 @@ var Cookie = {
 
 jssdk将授权后得到的access_token、refresh_token、expires_in、uid、status等数据写入到以weibojs_{appkey}命名的cookie中，通过chrome的开发者工具，确实可以看到如下信息：
 
-![jssdk cookie](http://kikoroc.qiniudn.com/jssdkcookie.jpg)
+![jssdk cookie](https://odxth7737.qnssl.com/jssdkcookie.jpg)
 
 当然，这里的安全已经不是微博能控制的了，因为这已经是在第三方站点了。设想下，如果这第三方网站存在XSS漏洞，黑客可以很容易的通过XSS漏洞拿到cookie数据，也就拿到用户的access_token，拿到这个访问令牌就能干很多坏事了，因为微博的api调用都是通过这个令牌来完成的。比如关注某个用户的api为：
 
-![create friendship](http://kikoroc.qiniudn.com/createfri.jpg)
+![create friendship](https://odxth7737.qnssl.com/createfri.jpg)
 
 有了用户的access_token就能很容易的让用户关注任何人了！还有更多的api来做坏事！
 那自己的微博做了下测试，取消关注好友：
 
-![destory friendship](http://kikoroc.qiniudn.com/destoryfri.jpg)
+![destory friendship](https://odxth7737.qnssl.com/destoryfri.jpg)
 
 一个简单命令行就能取消关注好友！
 
